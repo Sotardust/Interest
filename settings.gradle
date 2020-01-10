@@ -1,0 +1,2 @@
+include ':app', ':network', ':eventbus', ':baselib', ':database', ':music'
+rootProject.name='Interest'
