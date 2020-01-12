@@ -2,11 +2,12 @@ package com.dht.baselib.util.file
 
 import android.os.Environment
 import android.util.Log
-import com.dht.baselib.util.file.FileManager.Companion.instance
 import com.dht.baselib.util.loge
 import java.io.BufferedWriter
 import java.io.File
 import java.io.RandomAccessFile
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * @author dai
@@ -17,23 +18,17 @@ object FileUtil {
     /**
      * 日志文件名称
      */
-    const val LOG_FILE = "log"
-
-    /**
-     * 创建日志文件log.txt
-     */
-    fun createLogFile() {
-        Log.d(TAG, "createLogFile: ")
-        val log = PathUtil.LOG_PATH + LOG_FILE
-        instance!!.createNewFile(log)
-    }
+    private const val LOG_FILE = "log.txt"
 
     @JvmField
-    val appHomeDir = Environment.getExternalStorageDirectory()
-        .absolutePath + File.separator + "patrol3"//文件统一放在这个目录下
+    val appHomeDir =
+        Environment.getExternalStorageDirectory().absolutePath + File.separator + "interest"//文件统一放在这个目录下
 
     @JvmField
     val logDir = appHomeDir + File.separator + "logs"
+
+    @JvmField
+    val musicDir = appHomeDir + File.separator + "music"
 
     @JvmField
     val videoDir = appHomeDir + File.separator + "videos"
@@ -73,9 +68,7 @@ object FileUtil {
             if (!targetDir.exists()) {
                 targetDir.mkdirs()
             }
-            val fileName =
-                "${LOG_FILE}.txt"
-            val targetFile = File(targetDir, fileName)
+            val targetFile = File(targetDir, LOG_FILE)
             if (!targetFile.exists()) {
                 targetFile.createNewFile()
             }
@@ -161,4 +154,16 @@ fun BufferedWriter.writeLineFile(msg: String) {
 fun BufferedWriter.closeWriter() {
     this.flush()
     this.close()
+}
+
+/**
+ * 格式化数据
+ * @param tag
+ * @param info
+ * @return 格式化的字符串
+ */
+private fun getFormatInfo(tag: String, info: String): String {
+    val simpleDateFormat =
+        SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
+    return simpleDateFormat.format(Date()) + " : " + tag + " : " + info + "\n"
 }

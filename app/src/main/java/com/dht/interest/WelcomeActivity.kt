@@ -9,7 +9,6 @@ import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import com.dht.baselib.base.BaseActivity
 import com.dht.baselib.callback.LocalCallback
-import com.dht.baselib.util.file.FileUtil.createLogFile
 import com.dht.interest.login.LoginActivity
 import java.util.*
 
@@ -34,9 +33,7 @@ class WelcomeActivity : BaseActivity() {
             TAG,
             " requestCode = [$requestCode], permissions = [" + permissions.contentToString() + "], grantResults = [" + grantResults + "]"
         )
-        if (requestCode == REQUEST_CODE) { //请求权限后必须创建日志文件
-            createLogFile()
-        }
+
         welcomeModel!!.initDatabaseData(object : LocalCallback<String>() {
             override fun onChangeData(data: String?) {
                 Log.d(TAG, "onChangeData: path = $data")

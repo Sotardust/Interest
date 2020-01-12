@@ -59,7 +59,7 @@ class MusicService : Service() {
                 "onPrepared: isPlaying = " + mp.isPlaying
             )
         }
-         mediaPlayer?.setOnCompletionListener(OnCompletionListener { mp ->
+        mediaPlayer?.setOnCompletionListener(OnCompletionListener { mp ->
             Log.d(
                 TAG,
                 "onCompletion() called with: mp = [$mp]"
@@ -74,7 +74,7 @@ class MusicService : Service() {
                 e.printStackTrace()
             }
         })
-         mediaPlayer?.setOnErrorListener { mp, what, extra ->
+        mediaPlayer?.setOnErrorListener { mp, what, extra ->
             Log.d(
                 TAG,
                 "onError() called with: mp = [$mp], what = [$what], extra = [$extra]"
@@ -109,9 +109,9 @@ class MusicService : Service() {
                     if (musicList.contains(music)) {
                         currentPlayIndex = musicList.lastIndexOf(music)
                     }
-                     mediaPlayer?.reset()
-                     mediaPlayer?.setDataSource(music.path)
-                     mediaPlayer?.prepare()
+                    mediaPlayer?.reset()
+                    mediaPlayer?.setDataSource(music.path)
+                    mediaPlayer?.prepare()
                     Log.d("MusicTitleView", "playMusic: music = $music")
                     this@MusicService.currentMusic = music
                 } catch (e: IOException) {
@@ -126,7 +126,7 @@ class MusicService : Service() {
                 toastCustomTime("数据初始化中")
                 return
             }
-            playMusic(currentMusic)
+            playMusic(this@MusicService.currentMusic!!)
         }
 
         override fun initPlayList() {
@@ -137,7 +137,7 @@ class MusicService : Service() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val attrBuilder = AudioAttributes.Builder()
                 attrBuilder.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                 mediaPlayer?.setAudioAttributes(attrBuilder.build())
+                mediaPlayer?.setAudioAttributes(attrBuilder.build())
             }
             INSTANCE.post(InitPlayListEvent())
             isFirstInit = false
@@ -145,7 +145,7 @@ class MusicService : Service() {
 
         override fun setPlayType(type: Int) {
             MessagePreferences.INSTANCE.playType = type
-             mediaPlayer?.isLooping = type == PlayType.SINGLE_CYCLE.index
+            mediaPlayer?.isLooping = type == PlayType.SINGLE_CYCLE.index
         }
 
         override fun playPause() {
@@ -153,29 +153,29 @@ class MusicService : Service() {
                 if (this@MusicService.currentMusic == null) {
                     playMusic(MessagePreferences.INSTANCE.currentMusic.toMusic())
                 } else {
-                     mediaPlayer?.start()
+                    mediaPlayer?.start()
                 }
             }
         }
 
         override fun pause() {
             synchronized(MusicBean::class.java) {
-                if (mediaPlayer ==null){
+                if (mediaPlayer == null) {
                     mediaPlayer = MediaPlayer()
                 }
                 if (mediaPlayer!!.isPlaying) {
-                     mediaPlayer?.pause()
+                    mediaPlayer?.pause()
                 }
             }
         }
 
         override fun stop() {
             synchronized(MusicBean::class.java) {
-                if (mediaPlayer ==null){
+                if (mediaPlayer == null) {
                     mediaPlayer = MediaPlayer()
                 }
-                if ( mediaPlayer!!.isPlaying) {
-                     mediaPlayer?.stop()
+                if (mediaPlayer!!.isPlaying) {
+                    mediaPlayer?.stop()
                 }
             }
         }
@@ -230,27 +230,27 @@ class MusicService : Service() {
         }
 
         override fun seekTo(msec: Int) {
-             mediaPlayer?.seekTo(msec)
+            mediaPlayer?.seekTo(msec)
         }
 
         override fun isLooping(): Boolean {
-            return  mediaPlayer!!.isLooping
+            return mediaPlayer!!.isLooping
         }
 
         override fun isPlaying(): Boolean {
-            return  mediaPlayer!!.isPlaying
+            return mediaPlayer!!.isPlaying
         }
 
         override fun position(): Int {
-            return  mediaPlayer!!.currentPosition
+            return mediaPlayer!!.currentPosition
         }
 
         override fun getDuration(): Int {
-            return  mediaPlayer!!.duration
+            return mediaPlayer!!.duration
         }
 
         override fun getCurrentPosition(): Int {
-            return  mediaPlayer!!.currentPosition
+            return mediaPlayer!!.currentPosition
         }
 
         override fun getPlayList(): List<Music> {
@@ -261,8 +261,13 @@ class MusicService : Service() {
             musicList = musics
         }
 
-        override fun getCurrentMusic(): Music {
-            return if (this@MusicService.currentMusic == null) MessagePreferences.INSTANCE.currentMusic.toMusic() else this@MusicService.currentMusic!!
+        override fun getCurrentMusic(): Music? {
+            if (this@MusicService.currentMusic == null) {
+                val current = MessagePreferences.INSTANCE.currentMusic ?: return null
+                return current.toMusic()
+            } else {
+                return this@MusicService.currentMusic
+            }
         }
 
         override fun removeFromQueue(position: Int) {}
@@ -273,15 +278,15 @@ class MusicService : Service() {
         }
 
         override fun release() {
-            if ( mediaPlayer != null) {
-                 mediaPlayer?.stop()
-                 mediaPlayer?.release()
-                 mediaPlayer = null
+            if (mediaPlayer != null) {
+                mediaPlayer?.stop()
+                mediaPlayer?.release()
+                mediaPlayer = null
             }
         }
     }
 
     companion object {
-        private const val TAG = "MusicService"
+        private const val TAG = "dht"
     }
 }

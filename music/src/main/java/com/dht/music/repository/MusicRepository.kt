@@ -3,6 +3,7 @@ package com.dht.music.repository
 import android.app.Application
 import android.util.Log
 import com.dht.baselib.callback.LocalCallback
+import com.dht.baselib.util.logd
 import com.dht.database.BaseDatabase
 import com.dht.database.bean.music.MusicBean
 import com.dht.database.dao.MusicDao
@@ -26,7 +27,7 @@ class MusicRepository(application: Application) {
     init {
         val appDatabase =
             BaseDatabase.getInstance(application.applicationContext)
-        musicDao = appDatabase.musicDao
+        musicDao = appDatabase!!.musicDao
         Log.d(TAG, "MusicRepository: musicDao = $musicDao")
     }
 
@@ -39,9 +40,8 @@ class MusicRepository(application: Application) {
     fun insertMusic(musics: ArrayList<MusicBean>, localCallback: LocalCallback<String>) {
         GlobalScope.launch {
             val list = musicDao.getAllNames()
-            if (list != null && list.isNotEmpty()) {
-                musicDao.addMusicEntities(musics.filter { !(list.contains(it.name)) })
-            }
+            logd("$list")
+            musicDao.addMusicEntities(musics.filter { !(list.contains(it.name)) })
             localCallback.onChangeData()
         }
     }

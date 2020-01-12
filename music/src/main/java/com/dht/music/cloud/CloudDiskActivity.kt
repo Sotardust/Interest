@@ -1,7 +1,7 @@
 package com.dht.music.cloud
 
 import android.os.Bundle
-import com.dht.music.MusicActivity
+import com.dht.baselib.base.BaseActivity
 import com.dht.music.R
 
 /**
@@ -9,7 +9,7 @@ import com.dht.music.R
  *
  * @author Administrator
  */
-class CloudDiskActivity : MusicActivity() {
+class CloudDiskActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)

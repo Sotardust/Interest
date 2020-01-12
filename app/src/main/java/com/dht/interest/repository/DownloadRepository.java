@@ -16,7 +16,7 @@ public class DownloadRepository {
 
     public DownloadRepository(Application application) {
 
-        downloadDao = BaseDatabase.getInstance(application.getApplicationContext()).getDownloadDao();
+        downloadDao = BaseDatabase.Companion.getInstance(application.getApplicationContext()).getDownloadDao();
     }
 
     public void addDownloadMusic(DownloadBean music) {

@@ -1,14 +1,12 @@
 package com.dht.interest.login
 
-import com.dht.baselib.base.BaseApi
+import com.dht.baselib.util.BASE_URL
 import com.dht.baselib.util.loge
 import com.dht.interest.network.service.LoginService
-import com.dht.music.api.MusicService
 import com.dht.network.BaseModel
 import com.dht.network.NetworkCallback
 import com.dht.network.RetrofitClient
 import kotlinx.coroutines.*
-import retrofit2.Call
 
 /**
  * @author Administrator
@@ -31,16 +29,17 @@ class LoginApi {
     ) {
 
         val handler = CoroutineExceptionHandler { _, throwable ->
+
             networkCallback.onChangeData(null)
             loge(throwable)
         }
         GlobalScope.launch(handler) {
-            withContext(Dispatchers.IO) {
-                val response =
-                    RetrofitClient.INSTANCE.create(BaseApi.BASE_URL, LoginService::class.java)
-                        .login(name, password).execute()
-                networkCallback.onChangeData(if (response.code() != 200) null else response.body())
-            }
+                val service = RetrofitClient.INSTANCE.create(BASE_URL, LoginService::class.java)
+                val call = service.login(name, password)
+                val response = call.execute()
+                withContext(Dispatchers.Main) {
+                    networkCallback.onChangeData(if (response.code() != 200) null else response.body())
+                }
         }
     }
 
@@ -66,9 +65,9 @@ class LoginApi {
         GlobalScope.launch(handler) {
             withContext(Dispatchers.IO) {
                 val response =
-                    RetrofitClient.INSTANCE.create(BaseApi.BASE_URL, LoginService::class.java)
-                        .register(name, password, registerTime).execute()
-                networkCallback.onChangeData(if (response.code() != 200) null else response.body())
+                    RetrofitClient.INSTANCE.create(BASE_URL, LoginService::class.java)
+                        ?.register(name, password, registerTime)?.execute()
+                networkCallback.onChangeData(if (response?.code() != 200) null else response.body())
             }
         }
     }

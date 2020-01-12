@@ -1,7 +1,6 @@
-package com.dht.baselib.music
+package com.dht.baselib.service
 
 import android.os.RemoteException
-import com.dht.baselib.music.MusicContact.Presenter
 import com.dht.database.bean.music.IMusicAidlInterface
 import com.dht.database.bean.music.MusicBean
 import java.util.*
@@ -9,14 +8,14 @@ import java.util.*
 /**
  * @author Administrator
  */
-class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
+class MusicServiceImpl(private val iBinder: IMusicAidlInterface) {
 
     /**
      * 播放音乐
      *
      * @param music MusicBean
      */
-    override fun playMusic(music: MusicBean) {
+    fun playMusic(music: MusicBean) {
         try {
             iBinder.playMusic(music.toMusic())
         } catch (e: RemoteException) {
@@ -27,7 +26,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
     /**
      * 播放当前音乐
      */
-    override fun playCurrentMusic() {
+    fun playCurrentMusic() {
         try {
             iBinder.playCurrentMusic()
         } catch (e: RemoteException) {
@@ -38,7 +37,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
     /**
      * 初始化播放列表
      */
-    override fun initPlayList() {
+    fun initPlayList() {
         try {
             iBinder.initPlayList()
         } catch (e: RemoteException) {
@@ -49,7 +48,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
     /**
      * 更改播放列表
      */
-    override fun setPlayList(musics: List<MusicBean>) {
+    fun setPlayList(musics: List<MusicBean>) {
         try {
             iBinder.playList = musics.map { it.toMusic() }
         } catch (e: RemoteException) {
@@ -62,7 +61,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
      *
      * @param type 类型
      */
-    override fun setPlayType(type: Int) {
+    fun setPlayType(type: Int) {
         try {
             iBinder.setPlayType(type)
         } catch (e: RemoteException) {
@@ -73,7 +72,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
     /**
      * 播放已暂停的音乐
      */
-    override fun playPause() {
+    fun playPause() {
         try {
             iBinder.playPause()
         } catch (e: RemoteException) {
@@ -84,7 +83,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
     /**
      * 暂停
      */
-    override fun pause() {
+    fun pause() {
         try {
             iBinder.pause()
         } catch (e: RemoteException) {
@@ -95,7 +94,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
     /**
      * 停止播放音乐
      */
-    override fun stop() {
+    fun stop() {
         try {
             iBinder.stop()
         } catch (e: RemoteException) {
@@ -106,7 +105,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
     /**
      * 播放上一首音乐
      */
-    override fun playPrevious() {
+    fun playPrevious() {
         try {
             iBinder.playPrevious()
         } catch (e: RemoteException) {
@@ -117,7 +116,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
     /**
      * 播放下一首音乐
      */
-    override fun playNext() {
+    fun playNext() {
         try {
             iBinder.playNext()
         } catch (e: RemoteException) {
@@ -130,7 +129,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
      *
      * @param msec 指定位置
      */
-    override fun seekTo(msec: Int) {
+    fun seekTo(msec: Int) {
         try {
             iBinder.seekTo(msec)
         } catch (e: RemoteException) {
@@ -143,7 +142,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
      *
      * @return 是否循环播放
      */
-    override val isLooping: Boolean
+    val isLooping: Boolean
         get() {
             try {
                 return iBinder.isLooping()
@@ -158,7 +157,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
      *
      * @return 布尔型
      */
-    override val isPlaying: Boolean
+    val isPlaying: Boolean
         get() {
             try {
                 return iBinder.isPlaying
@@ -168,7 +167,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
             return false
         }
 
-    override fun position(): Int {
+    fun position(): Int {
         try {
             return iBinder.position()
         } catch (e: RemoteException) {
@@ -182,7 +181,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
      *
      * @return 时长
      */
-    override val duration: Int
+    val duration: Int
         get() {
             try {
                 return iBinder.duration
@@ -197,7 +196,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
      *
      * @return 位置
      */
-    override val currentPosition: Int
+    val currentPosition: Int
         get() {
             try {
                 iBinder.currentPosition
@@ -212,7 +211,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
      *
      * @return 音乐列表集合
      */
-    override fun getPlayList(): List<MusicBean> {
+    private fun getPlayList(): List<MusicBean> {
         try {
             return iBinder.playList.map { it.toMusicBean() }
         } catch (e: RemoteException) {
@@ -227,10 +226,15 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
      *
      * @return 音乐实体类
      */
-    override val currentMusic: MusicBean
+    val currentMusic: MusicBean
         get() {
             try {
-                return iBinder.currentMusic.toMusicBean()
+                return if (iBinder.currentMusic == null) {
+                    getPlayList()[0]
+                } else {
+
+                    iBinder.currentMusic?.toMusicBean()!!
+                }
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
@@ -242,7 +246,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
      *
      * @param position 队列下表
      */
-    override fun removeFromQueue(position: Int) {
+    fun removeFromQueue(position: Int) {
         try {
             iBinder.removeFromQueue(position)
         } catch (e: RemoteException) {
@@ -253,7 +257,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
     /**
      * 清楚队列
      */
-    override fun clearQueue() {
+    fun clearQueue() {
         try {
             iBinder.clearQueue()
         } catch (e: RemoteException) {
@@ -266,7 +270,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
      *
      * @param show 是否显示
      */
-    override fun showDesktopLyric(show: Boolean) {
+    fun showDesktopLyric(show: Boolean) {
         try {
             iBinder.showDesktopLyric(show)
         } catch (e: RemoteException) {
@@ -274,7 +278,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
         }
     }
 
-    override fun audioSessionId(): Int {
+    fun audioSessionId(): Int {
         try {
             iBinder.audioSessionId()
         } catch (e: RemoteException) {
@@ -286,7 +290,7 @@ class MusicModel(private val iBinder: IMusicAidlInterface) : Presenter {
     /**
      * 回收流媒体资源
      */
-    override fun release() {
+    fun release() {
         try {
             iBinder.release()
         } catch (e: RemoteException) {

@@ -18,13 +18,14 @@ class CloudDiskRepository constructor(application: Application) {
 
     init {
         val appDatabase = BaseDatabase.getInstance(application.applicationContext)
-        cloudMusicDao = appDatabase.cloudMusicDao
+        cloudMusicDao = appDatabase?.cloudMusicDao
     }
 
     /**
      * 获取云盘音乐列表
      */
-    fun getMusicList(): List<CloudMusicBean>? = cloudMusicDao?.getCloudMusicList(MessagePreferences.INSTANCE.personId)
+    fun getMusicList(): List<CloudMusicBean>? =
+        cloudMusicDao?.getCloudMusicList(MessagePreferences.INSTANCE.personId)
 
     /**
      * 向库中插入云盘音乐
@@ -32,5 +33,8 @@ class CloudDiskRepository constructor(application: Application) {
     fun insertMusic(beans: List<CloudMusicBean>) {
         cloudMusicDao?.addCloudMusicEntities(beans)
     }
+
+    fun getTotal(): Int =
+        cloudMusicDao?.getCloudMusicTotal(MessagePreferences.INSTANCE.personId) ?: 0
 
 }

@@ -58,7 +58,7 @@ ext {
     converterGsonVersion = '2.3.0'
     adapterRxjava2Version = '2.3.0'
 
-    okHttpVersion = '3.12.0'
+    okHttpVersion = '4.3.1'
     loggingInterceptorVersion = '3.4.1'
 
     rxjavaVersion = '2.2.4'

@@ -1,13 +1,13 @@
 package com.dht.music.view
 
-import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
 import android.widget.*
+import com.dht.baselib.base.BaseActivity
+import com.dht.baselib.base.BaseFragment
 import com.dht.baselib.callback.LocalCallback
-import com.dht.baselib.music.MusicModel
 import com.dht.baselib.util.SimpleTextWatcher
 import com.dht.baselib.util.toastCustomTime
 import com.dht.database.bean.music.MusicBean
@@ -28,12 +28,11 @@ class TopTitleView : LinearLayout, View.OnClickListener {
     private lateinit var search: TextView
     private lateinit var setting: ImageView
     private lateinit var playRelative: RelativeLayout
-    private lateinit  var songName: TextView
-    private lateinit  var author: TextView
+    private lateinit var songName: TextView
+    private lateinit var author: TextView
     private lateinit var shared: ImageView
-    private  var mContext: Context
-    private var activity: Activity? = null
-    private var mModel: MusicModel? = null
+    private var mContext: Context
+    private var activity: BaseActivity? = null
 
     constructor(context: Context) : super(context) {
         this.mContext = context
@@ -91,9 +90,8 @@ class TopTitleView : LinearLayout, View.OnClickListener {
      *
      * @param activity Activity
      */
-    fun setActivity(activity: Activity, mModel: MusicModel?) {
+    fun setActivity(activity: BaseActivity) {
         this.activity = activity
-        this.mModel = mModel
     }
 
     /**
@@ -111,7 +109,7 @@ class TopTitleView : LinearLayout, View.OnClickListener {
      * @param localCallback 本地回调接口
      */
     fun setSharedCallback(localCallback: LocalCallback<MusicBean?>) {
-        shared.setOnClickListener { localCallback.onChangeData(mModel?.currentMusic) }
+        shared.setOnClickListener { localCallback.onChangeData(BaseFragment.service.currentMusic) }
     }
 
     /**
@@ -120,7 +118,7 @@ class TopTitleView : LinearLayout, View.OnClickListener {
      * @param activity Activity
      * @param value    值
      */
-    fun updateView(activity: Activity, value: String?) {
+    fun updateView(activity: BaseActivity, value: String?) {
         this.activity = activity
         activity.runOnUiThread {
             title.visibility = View.VISIBLE
@@ -134,7 +132,7 @@ class TopTitleView : LinearLayout, View.OnClickListener {
     fun updatePlayView() {
         RxBus.INSTANCE.toRxBusResult<UpdateTopPlayEvent>(object : RxCallBack {
             override fun onCallBack(data: Any) {
-                val music = mModel!!.currentMusic
+                val music = BaseFragment.service.currentMusic
                 playRelative.visibility = View.VISIBLE
                 songName.text = music.name
                 author.text = music.author
@@ -161,19 +159,19 @@ class TopTitleView : LinearLayout, View.OnClickListener {
 
     override fun onClick(v: View) {
         val i = v.id
-        if (i == R.id.top_title_back) {
-            activity?.finish()
-        } else if (i == R.id.top_search) {
-            val isSearch =
-                context.getString(R.string.search) == search.text.toString()
-            title.visibility = if (isSearch) View.GONE else View.VISIBLE
-            if (!isSearch && !TextUtils.isEmpty(searchEdit.text)) {
-                searchEdit.setText(null)
+        when (i) {
+            R.id.top_title_back -> activity?.finish()
+            R.id.top_search -> {
+                val isSearch =
+                    context.getString(R.string.search) == search.text.toString()
+                title.visibility = if (isSearch) View.GONE else View.VISIBLE
+                if (!isSearch && !TextUtils.isEmpty(searchEdit.text)) {
+                    searchEdit.text = null
+                }
+                searchEdit.visibility = if (isSearch) View.VISIBLE else View.GONE
+                search.setText(if (isSearch) R.string.close_search else R.string.search)
             }
-            searchEdit.visibility = if (isSearch) View.VISIBLE else View.GONE
-            search.setText(if (isSearch) R.string.close_search else R.string.search)
-        } else if (i == R.id.top_setting) {
-            mContext.toastCustomTime( "功能待开发")
+            R.id.top_setting -> mContext.toastCustomTime("功能待开发")
         }
     }
 

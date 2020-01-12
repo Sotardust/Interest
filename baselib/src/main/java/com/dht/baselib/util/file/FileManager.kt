@@ -1,7 +1,7 @@
 package com.dht.baselib.util.file
 
 import android.util.Log
-import com.dht.baselib.util.LogUtil
+import com.dht.baselib.util.loge
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -23,8 +23,8 @@ class FileManager private constructor() {
      */
     private fun createDirectory() {
         val directoryList = ArrayList<String>()
-        directoryList.add(PathUtil.MUSIC_PATH)
-        directoryList.add(PathUtil.LOG_PATH)
+        directoryList.add(FileUtil.musicDir)
+        directoryList.add(FileUtil.logDir)
         for (path in directoryList) {
             val directory = File(path)
             if (!directory.exists()) {
@@ -44,7 +44,6 @@ class FileManager private constructor() {
      * @return 文件对象
      */
     fun createNewFile(path: String): File {
-        LogUtil.writeInfo(TAG, "createNewFile", path)
         val file = File(path)
         try {
             if (!file.exists()) {
@@ -55,12 +54,8 @@ class FileManager private constructor() {
                 )
             }
         } catch (e: IOException) {
-            LogUtil.writeErrorInfo(
-                TAG,
-                "createNewFile",
-                e.toString()
-            )
             e.printStackTrace()
+            loge(e)
         }
         return file
     }

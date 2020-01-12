@@ -32,6 +32,6 @@ class BaseApi {
 
     companion object {
         // 使用本机iP地址 不能使用 127.0.0.1（虚拟机把其作为自身IP）
-        const val BASE_URL = "http://192.168.1.71:8080/message/"
+
     }
 }

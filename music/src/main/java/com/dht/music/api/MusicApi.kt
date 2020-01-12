@@ -1,6 +1,6 @@
 package com.dht.music.api
 
-import com.dht.baselib.base.BaseApi
+import com.dht.baselib.util.BASE_URL
 import com.dht.baselib.util.loge
 import com.dht.database.bean.music.CloudMusicBean
 import com.dht.network.BaseModel
@@ -30,10 +30,10 @@ class MusicApi {
         }
         GlobalScope.launch(handler) {
             withContext(Dispatchers.IO) {
-                val response =
-                    RetrofitClient.INSTANCE.create(BaseApi.BASE_URL, MusicService::class.java)
-                        .uploadFile(body).execute()
-                networkCallback.onChangeData(if (response.code() != 200) null else response.body())
+                val response = RetrofitClient.INSTANCE.create(BASE_URL, MusicService::class.java)
+                    ?.uploadFile(body)
+                    ?.execute()
+                networkCallback.onChangeData(if (response?.code() != 200) null else response.body())
             }
         }
     }
@@ -50,11 +50,9 @@ class MusicApi {
             loge(throwable)
         }
         GlobalScope.launch(handler) {
-            withContext(Dispatchers.IO) {
-                val response =
-                    RetrofitClient.INSTANCE
-                        .create(BaseApi.BASE_URL, MusicService::class.java)
-                        .cloudMusicList.execute()
+            val response = RetrofitClient.INSTANCE.create(BASE_URL, MusicService::class.java)
+                .cloudMusicList.execute()
+            withContext(Dispatchers.Main) {
                 networkCallback.onChangeData(if (response.code() != 200) null else response.body())
             }
         }
@@ -76,11 +74,9 @@ class MusicApi {
         }
         GlobalScope.launch(handler) {
             withContext(Dispatchers.IO) {
-                val response =
-                    RetrofitClient.INSTANCE
-                        .create(BaseApi.BASE_URL, MusicService::class.java)
-                        .downloadMusic(songName).execute()
-                networkCallback.onChangeData(if (response.code() != 200) null else response.body())
+                val response = RetrofitClient.INSTANCE.create(BASE_URL, MusicService::class.java)
+                    ?.downloadMusic(songName)?.execute()
+                networkCallback.onChangeData(if (response?.code() != 200) null else response.body())
             }
         }
     }

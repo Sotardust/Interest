@@ -48,6 +48,7 @@ class LoginFragment : BaseFragment() {
         repository = MusicRepository(mViewModel.getApplication<MessageApplication>())
         mBinding.loginViewModel = mViewModel
         bindViews()
+        service.initPlayList()
     }
 
     override fun bindViews() {
@@ -94,8 +95,13 @@ class LoginFragment : BaseFragment() {
                     context?.toastCustomTime("网络超时", 200)
                     return
                 }
-                getModel()?.initPlayList()
+                service.initPlayList()
                 if (data.code == HttpStatusCode.CODE_100) {
+                    if (data.result == null) {
+                        MessagePreferences.INSTANCE.personId = 0L
+                    } else {
+                        MessagePreferences.INSTANCE.personId = data.result!!.toLong()
+                    }
                     toMainActivity()
                 }
                 if (!data.msg.isNullOrBlank()) {
@@ -107,14 +113,11 @@ class LoginFragment : BaseFragment() {
     private fun initRxEvent() {
         RxBus.INSTANCE.toRxBusResult<InitPlayListEvent>(object : RxCallBack {
             override fun onCallBack(data: Any) {
-                repository!!.getAllMusics(object : LocalCallback<List<MusicBean>>() {
+                repository?.getAllMusics(object : LocalCallback<List<MusicBean>>() {
                     override fun onChangeData(data: List<MusicBean>?) {
                         super.onChangeData(data)
                         if (data == null) return
-                        getModel()?.setPlayList(data)
-                        if (MessagePreferences.INSTANCE.currentMusic == null && data.isNotEmpty()) {
-                            MessagePreferences.INSTANCE.currentMusic = data[0]
-                        }
+                        service.setPlayList(data)
                     }
                 })
             }
@@ -125,7 +128,6 @@ class LoginFragment : BaseFragment() {
      * 跳转到主页面
      */
     private fun toMainActivity() {
-        MessagePreferences.INSTANCE.personId = 123
         val intent = Intent(context, MainActivity::class.java)
         startActivity(intent)
         if (activity != null) {

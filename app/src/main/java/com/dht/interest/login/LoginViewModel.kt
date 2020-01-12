@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.annotation.NonNull
 import androidx.lifecycle.AndroidViewModel
 import com.dht.baselib.util.file.FileManager.Companion.instance
-import com.dht.baselib.util.file.PathUtil
+import com.dht.baselib.util.file.FileUtil
 import com.dht.baselib.util.toast
 import com.dht.network.BaseModel
 import com.dht.network.NetworkCallback
@@ -81,7 +81,7 @@ class LoginViewModel(@NonNull  application: Application) :
         multiple: Double
     ) {
         Observable.create<String> { emitter ->
-            val path = PathUtil.MUSIC_PATH + fileName
+            val path = FileUtil.musicDir + fileName
             val builder = StringBuilder()
             builder.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>").append("\n")
             builder.append("<resources>").append("\n")

@@ -5,7 +5,6 @@ import androidx.annotation.NonNull
 import androidx.lifecycle.MutableLiveData
 import com.dht.baselib.base.BaseAndroidViewModel
 import com.dht.baselib.callback.LocalCallback
-import com.dht.baselib.util.LogUtil.writeInfo
 import com.dht.interest.repository.AllCallsRepository
 import com.dht.interest.repository.entity.AllCallsEntity
 import java.util.*
@@ -59,7 +58,6 @@ class MissedCallsViewModel(@NonNull application: Application) :
      * @param text
      */
     fun sendMessageToWeChat(text: String?) {
-        writeInfo(TAG, "", text!!)
         //        WXTextObject textObject = new WXTextObject();
 //        textObject.text = "测试数据分享到微信";
 //

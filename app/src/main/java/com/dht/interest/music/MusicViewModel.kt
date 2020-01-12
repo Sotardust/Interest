@@ -6,8 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import com.dht.baselib.base.BaseAndroidViewModel
 import com.dht.baselib.callback.LocalCallback
 import com.dht.interest.R
+import com.dht.music.repository.CloudDiskRepository
 import com.dht.music.repository.MusicRepository
 import com.dht.music.repository.RecentPlayRepository
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 /**
@@ -17,6 +20,7 @@ class MusicViewModel(@NonNull application: Application) :
     BaseAndroidViewModel(application) {
     private val repository: MusicRepository = MusicRepository(application)
     private val recentPlayRepository: RecentPlayRepository = RecentPlayRepository(application)
+    private val cloudDiskRepository: CloudDiskRepository = CloudDiskRepository(application)
     private val list: MutableList<Int> = ArrayList()
     private val musicData: MutableLiveData<List<Int>> = MutableLiveData()
     /**
@@ -39,6 +43,12 @@ class MusicViewModel(@NonNull application: Application) :
                     musicData.postValue(list)
                 }
             })
+            GlobalScope.launch {
+
+                list[2] = cloudDiskRepository.getTotal()
+                musicData.postValue(list)
+            }
+
             return musicData
         }
 

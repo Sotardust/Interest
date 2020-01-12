@@ -2,7 +2,6 @@ package com.dht.interest.repository
 
 import android.app.Application
 import com.dht.baselib.callback.LocalCallback
-import com.dht.baselib.util.LogUtil.writeInfo
 import com.dht.database.BaseDatabase
 import com.dht.interest.repository.dao.AllCallsDao
 import com.dht.interest.repository.entity.AllCallsEntity
@@ -23,11 +22,6 @@ class AllCallsRepository(application: Application) {
      * @param entity AllCallsEntity
      */
     fun addAllCallsEntity(entity: AllCallsEntity) {
-        writeInfo(
-            TAG,
-            "addAllCallsEntity",
-            entity.toString()
-        )
         GlobalScope.launch {
             allCallsDao?.addAllCallsEntity(entity)
         }
@@ -53,11 +47,6 @@ class AllCallsRepository(application: Application) {
         localCallback: LocalCallback<List<AllCallsEntity>>,
         callType: String
     ) {
-        writeInfo(
-            TAG,
-            "getCallsEntities",
-            callType
-        )
         GlobalScope.launch {
             val entities =
                 if ("0" == callType) allCallsDao?.findAllCallsEntities() else allCallsDao?.findCallsEntities(

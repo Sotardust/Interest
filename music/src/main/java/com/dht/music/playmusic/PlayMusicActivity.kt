@@ -3,7 +3,7 @@ package com.dht.music.playmusic
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import com.dht.music.MusicActivity
+import com.dht.baselib.base.BaseActivity
 import com.dht.music.R
 
 /**
@@ -11,7 +11,7 @@ import com.dht.music.R
  *
  * @author Administrator
  */
-class PlayMusicActivity : MusicActivity() {
+class PlayMusicActivity : BaseActivity() {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

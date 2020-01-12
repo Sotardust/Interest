@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dht.baselib.base.BaseActivity
 import com.dht.baselib.base.BaseFragment
 import com.dht.baselib.callback.RecycleItemClickCallBack
 import com.dht.baselib.util.VerticalDecoration
@@ -53,14 +54,11 @@ class CloudDiskFragment : BaseFragment() {
     }
 
     private var localAdapter: CloudDiskAdapter? = null
-    override fun initViews(view: View?) {
-        super.initViews(view)
-        cloudTopTitleView.setActivity(activity!!, getModel())
-        cloudTopTitleView.updatePlayView()
-    }
 
     override fun bindViews() {
         super.bindViews()
+        cloudTopTitleView.setActivity(activity as BaseActivity)
+        cloudTopTitleView.updatePlayView()
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         localAdapter = CloudDiskAdapter(recycleItemClickCallBack)
         val names = ArrayList<String>()
@@ -78,10 +76,9 @@ class CloudDiskFragment : BaseFragment() {
 
     private val callback: NetworkCallback<BaseModel<List<CloudMusicBean>>> =
         object : NetworkCallback<BaseModel<List<CloudMusicBean>>> {
-
             override fun onChangeData(data: BaseModel<List<CloudMusicBean>>?) {
+                mViewModel.insertMusicList(data?.result!!)
                 GlobalScope.launch {
-                    mViewModel.insertMusicList(data?.result!!)
                     val list = mViewModel.getMusicList()
                     withContext(Dispatchers.Main) {
                         localAdapter!!.setUsernameList(list?.map1 { it.name } as ArrayList<String>)
@@ -109,8 +106,8 @@ class CloudDiskFragment : BaseFragment() {
      * @param isRecyclerView 是否是RecyclerView
      */
     private fun setRecycleViewVisible(isRecyclerView: Boolean) {
-       recyclerView.visibility = if (isRecyclerView) View.VISIBLE else View.GONE
-       cloudNoMusic.visibility = if (isRecyclerView) View.GONE else View.VISIBLE
+        recyclerView.visibility = if (isRecyclerView) View.VISIBLE else View.GONE
+        cloudNoMusic.visibility = if (isRecyclerView) View.GONE else View.VISIBLE
     }
 
     companion object {

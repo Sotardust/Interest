@@ -19,7 +19,7 @@ interface MusicDao  {
     /**
      * 像数据表中插入music数据
      *
-     * @param list Music实体集合
+     * @param entities Music实体集合
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMusicEntities(entities: List<MusicBean>)
@@ -27,7 +27,7 @@ interface MusicDao  {
     /**
      * 像数据表中插入music数据
      *
-     * @param bean Music实体
+     * @param entity Music实体
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMusicEntity(entity: MusicBean)
@@ -71,5 +71,5 @@ interface MusicDao  {
      * @return 歌名集合
      */
     @Query("select name from music")
-    fun getAllNames(): List<String>?
+    fun getAllNames(): List<String>
 }

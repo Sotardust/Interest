@@ -10,9 +10,9 @@ import com.dht.music.repository.MusicRepository
 import com.dht.music.repository.RecentPlayRepository
 import com.dht.network.BaseModel
 import com.dht.network.NetworkCallback
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.net.URLEncoder
 import java.util.*
@@ -58,8 +58,7 @@ class LocalViewModel(application: Application) :
     ) {
         val builder = MultipartBody.Builder()
         for (file in fileList) {
-            val requestBody =
-                RequestBody.create(MediaType.parse("multiple/form-data"), file)
+            val requestBody = file.asRequestBody("multiple/form-data".toMediaTypeOrNull())
             builder.addFormDataPart("file", URLEncoder.encode(file.name), requestBody)
         }
         builder.setType(MultipartBody.FORM)

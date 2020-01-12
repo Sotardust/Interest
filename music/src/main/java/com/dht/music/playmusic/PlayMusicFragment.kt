@@ -48,20 +48,8 @@ class PlayMusicFragment : BaseFragment() {
         mBinding.playMusicViewModel = mViewModel
         initData()
         bindViews()
-        initViews(mBinding.root)
     }
 
-    override fun initViews(view: View?) {
-        super.initViews(view)
-        playTopTitleView.setActivity(activity!!, getModel())
-        playTopTitleView.updatePlayView()
-        playTopTitleView.setSharedCallback(object : LocalCallback<MusicBean?>() {
-            override fun onChangeData(data: MusicBean?) {
-                super.onChangeData(data)
-                context?.toastCustomTime("功能开发中...")
-            }
-        })
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     override fun initData() {
@@ -69,9 +57,9 @@ class PlayMusicFragment : BaseFragment() {
         val currentMusic: MusicBean = MessagePreferences.INSTANCE.currentMusic
 
         GlobalScope.launch {
-            val isPlaying = getModel()?.isPlaying
-            if (currentMusic.toString() != getModel()?.currentMusic.toString()) {
-                getModel()?.playMusic(currentMusic)
+            val isPlaying = service.isPlaying
+            if (currentMusic.toString() != service.currentMusic.toString()) {
+                service.playMusic(currentMusic)
             }
         }
 
@@ -84,6 +72,14 @@ class PlayMusicFragment : BaseFragment() {
 
     override fun bindViews() {
         super.bindViews()
+        playTopTitleView.setActivity(activity as BaseActivity)
+        playTopTitleView.updatePlayView()
+        playTopTitleView.setSharedCallback(object : LocalCallback<MusicBean?>() {
+            override fun onChangeData(data: MusicBean?) {
+                super.onChangeData(data)
+                context?.toastCustomTime("功能开发中...")
+            }
+        })
 
         playType.text = PlayType.getPlayTypeString(mPlayType)
     }
@@ -96,28 +92,28 @@ class PlayMusicFragment : BaseFragment() {
                 mPlayType = if (++mPlayType > PlayType.SHUFFLE_PLAYBACK.index) 0.also {
                     mPlayType = it
                 } else mPlayType
-                getModel()?.setPlayType(mPlayType)
+                service.setPlayType(mPlayType)
                 playType.text = PlayType.getPlayTypeString(mPlayType)
                 context?.toastCustomTime(PlayType.getPlayTypeString(mPlayType))
             }
             R.id.previous -> {
-                getModel()?.playPrevious()
+                service.playPrevious()
                 play.setText(R.string.playing)
                 context?.toastCustomTime(R.string.previous)
                 return
             }
             R.id.play -> {
-                if (getModel()!!.isPlaying) {
+                if (service.isPlaying) {
                     context?.toastCustomTime(R.string.pause)
-                    getModel()?.pause()
+                    service.pause()
                 } else {
-                    getModel()?.playPause()
+                    service.playPause()
                     context?.toastCustomTime(R.string.playing)
                 }
-                play.setText(if (getModel()!!.isPlaying) R.string.playing else R.string.pause)
+                play.setText(if (service.isPlaying) R.string.playing else R.string.pause)
             }
             R.id.next -> {
-                getModel()?.playNext()
+                service.playNext()
                 play.setText(R.string.playing)
                 context?.toastCustomTime(R.string.next)
             }
@@ -128,7 +124,7 @@ class PlayMusicFragment : BaseFragment() {
                     object : LocalCallback<MusicBean>() {
                         override fun onChangeData(data: MusicBean?) {
                             super.onChangeData(data)
-                            getModel()?.playMusic(data!!)
+                            service.playMusic(data!!)
                             dialogFragment.dismiss()
                         }
                     })

@@ -6,8 +6,7 @@
     android:alpha="0.8"
     android:background="@color/colorWhite"
     android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".WelcomeActivity">
+    android:orientation="vertical">
 
 
     <com.dht.interest.view.ProgressView

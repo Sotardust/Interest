@@ -1,2 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dht.baselib" />
+    package="com.dht.baselib" >
+
+    <application>
+        <service android:name=".service.MusicService" />
+    </application>
+</manifest>

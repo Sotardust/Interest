@@ -48,6 +48,15 @@ interface CloudMusicDao {
     @Query("select * from cloud_music where person_id =:personId")
     fun getCloudMusicList(personId: Long): List<CloudMusicBean>
 
+
+    /**
+     * 获取云盘音乐个数
+     *
+     * @return MusicBean 实体集合
+     */
+    @Query("select count(*) from cloud_music where person_id =:personId")
+    fun getCloudMusicTotal(personId: Long): Int
+
     /**
      * 查找下载完成的音乐数据
      *

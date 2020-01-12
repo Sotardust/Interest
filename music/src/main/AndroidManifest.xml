@@ -2,7 +2,7 @@
     package="com.dht.music">
 
     <application>
-        <activity android:name=".MusicActivity" />
+
         <activity android:name=".recentplay.RecentPlayActivity" />
         <activity android:name=".cloud.CloudDiskActivity" />
         <activity android:name=".download.DownloadActivity" />

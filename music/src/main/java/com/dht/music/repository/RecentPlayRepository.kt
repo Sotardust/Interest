@@ -3,7 +3,7 @@ package com.dht.music.repository
 import android.app.Application
 import android.util.Log
 import com.dht.baselib.callback.LocalCallback
-import com.dht.baselib.util.LogUtil.writeInfo
+import com.dht.baselib.util.loge
 import com.dht.database.BaseDatabase
 import com.dht.database.bean.music.MusicBean
 import com.dht.database.bean.music.RecentPlayBean
@@ -22,7 +22,7 @@ class RecentPlayRepository(application: Application) {
     private val recentPlayDao: RecentPlayDao
 
     private val handler = CoroutineExceptionHandler { _, exception ->
-        writeInfo(TAG, "异常", exception.toString())
+        loge(exception)
     }
 
     /**
@@ -162,9 +162,8 @@ class RecentPlayRepository(application: Application) {
     }
 
     init {
-        val appDatabase: BaseDatabase =
-            BaseDatabase.getInstance(application.applicationContext)
-        recentPlayDao = appDatabase.recentPlayDao
+        val appDatabase = BaseDatabase.getInstance(application.applicationContext)
+        recentPlayDao = appDatabase!!.recentPlayDao
         Log.d(
             TAG,
             "MusicRepository: musicDao = $recentPlayDao"

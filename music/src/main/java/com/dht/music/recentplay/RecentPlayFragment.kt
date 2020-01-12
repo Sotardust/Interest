@@ -17,6 +17,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dht.baselib.base.BaseActivity
 import com.dht.baselib.base.BaseFragment
 import com.dht.baselib.callback.RecycleItemClickCallBack
 
@@ -57,7 +58,7 @@ class RecentPlayFragment : BaseFragment() {
     override fun initViews(view: View?) {
         super.initViews(view)
         recentTopTitleView.updateView(
-            activity!!,
+            activity as BaseActivity,
             getString(R.string.listening_to_songs)
         )
     }
@@ -89,7 +90,7 @@ class RecentPlayFragment : BaseFragment() {
                     context?.toastCustomTime( R.string.delete_successful)
                 } else {
                     mViewModel?.insertOrUpdate(value?.music!!)
-                    MessagePreferences.INSTANCE.currentMusic = value?.music
+                    MessagePreferences.INSTANCE.currentMusic = value!!.music
                     val intent = Intent(context, PlayMusicActivity::class.java)
                     startActivity(intent)
                     onDestroy()

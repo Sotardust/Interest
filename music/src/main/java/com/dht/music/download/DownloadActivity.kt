@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.dht.baselib.base.BaseFragmentPageAdapter
 import com.dht.baselib.base.BaseViewPager
-import com.dht.music.MusicActivity
+import com.dht.baselib.base.BaseActivity
 import com.dht.music.R
 import com.google.android.material.tabs.TabLayout
 import java.util.*
@@ -14,7 +14,7 @@ import java.util.*
  *
  * @author Administrator
  */
-class DownloadActivity : MusicActivity() {
+class DownloadActivity : BaseActivity() {
     private val titles = arrayOf("正在下载", "下载完成")
     private var tabLayout: TabLayout? = null
     private var baseViewPager: BaseViewPager? = null

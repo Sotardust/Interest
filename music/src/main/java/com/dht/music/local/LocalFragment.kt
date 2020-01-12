@@ -52,18 +52,10 @@ class LocalFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         mViewModel = ViewModelProviders.of(this).get(LocalViewModel::class.java)
         mBinding.localViewModel = mViewModel
-        initViews(mBinding.root)
         bindViews()
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    override fun initViews(view: View?) {
-        super.initViews(view)
-        localMusicTitleView.setFragemt(this)
-        localTopTitleView.updateView(activity!!, getString(R.string.local_music))
-        localTopTitleView.setLocalTitleBar()
-        localTopTitleView.setSearchEditTextWatcher(textWatcher)
-    }
+
 
     private val textWatcher: SimpleTextWatcher = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
@@ -92,6 +84,10 @@ class LocalFragment : BaseFragment() {
 
     override fun bindViews() {
         super.bindViews()
+        localMusicTitleView.setActivity(activity  as BaseActivity)
+        localTopTitleView.updateView(activity as BaseActivity, getString(R.string.local_music))
+        localTopTitleView.setLocalTitleBar()
+        localTopTitleView.setSearchEditTextWatcher(textWatcher)
         val layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         localAdapter = LocalAdapter(recycleItemClickCallBack)
@@ -125,7 +121,7 @@ class LocalFragment : BaseFragment() {
                     mViewModel.uploadFiles(files, networkCallback)
                 } else {
                     mViewModel.insertOrUpdate(value)
-                    MessagePreferences.INSTANCE.currentMusic = value
+                    MessagePreferences.INSTANCE.currentMusic = value!!
                     val intent = Intent(context, PlayMusicActivity::class.java)
                     startActivity(intent)
                 }

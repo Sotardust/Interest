@@ -21,7 +21,7 @@
     <!-- 微信 ：AppID：wx4b46660f04a64bc4 -->
     <!-- 微信 ：AppSecret：2bb298412c9aa9bcefbb35000627b72e -->
 
-  git  <application
+    <application
         android:name=".MessageApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"

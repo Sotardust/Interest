@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.dht.baselib.base.BaseActivity
 import com.dht.baselib.base.BaseFragment
 import com.dht.baselib.base.BaseFragmentPageAdapter
-import com.dht.interest.MessageApplication
 import com.dht.interest.R
 import com.dht.interest.callback.OnPageChangerCallback
 import com.dht.interest.callback.TabLayoutCallback
@@ -39,6 +38,11 @@ class HomeFragment : BaseFragment() {
         R.drawable.tablayout_music_bg, R.drawable.tablayout_news_bg,
         R.drawable.tablayout_novel_bg, R.drawable.tablayout_setting_bg
     )
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
 
     override fun onCreateView(
         @NonNull inflater: LayoutInflater, @Nullable container: ViewGroup?,
@@ -66,7 +70,7 @@ class HomeFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         if (homeMusicTitleView != null) {
-            homeMusicTitleView!!.setFragemt(this)
+            homeMusicTitleView!!.setActivity(activity as BaseActivity)
             homeMusicTitleView!!.updateView()
         }
     }

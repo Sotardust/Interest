@@ -5,7 +5,7 @@ import android.util.Log
 import com.dht.baselib.base.BaseAndroidViewModel
 import com.dht.baselib.util.ParseUtil
 import com.dht.baselib.util.file.FileManager
-import com.dht.baselib.util.file.PathUtil
+import com.dht.baselib.util.file.FileUtil
 import com.dht.database.bean.music.CloudMusicBean
 import com.dht.music.api.MusicApi
 import com.dht.music.repository.CloudDiskRepository
@@ -49,20 +49,21 @@ class CloudDiskViewModel : BaseAndroidViewModel {
      */
     fun insertMusicList(bean: List<CloudMusicBean>) {
         GlobalScope.launch {
+
             val list = repository.getMusicList()
             //若已经存在 则不插入
-            val bes = bean.map { item ->
+            val bes = bean.filter { ite ->
+                val name = ParseUtil.parseSongName(ite.name)
+                val value = list!!.map { it.name }
+                if (value.isEmpty()) true else !value.contains(name)
+
+            }.map { item ->
+                item.type = ParseUtil.parseType(item.name)
                 item.name = ParseUtil.parseSongName(item.name)
                 item.path = null
-                item.type = ParseUtil.parseType(item.name)
-                (list?.map { it.name }?.contains(item.name))
                 item
             }
-            repository.insertMusic(bes.filter { item ->
-                !bean.map { ParseUtil.parseSongName(it.name) }.contains(
-                    item.name
-                )
-            })
+            repository.insertMusic(bes)
         }
     }
 
@@ -84,7 +85,7 @@ class CloudDiskViewModel : BaseAndroidViewModel {
                 }
                 GlobalScope.launch {
                     withContext(Dispatchers.IO) {
-                        val path = PathUtil.MUSIC_PATH + fileName
+                        val path = FileUtil.musicDir + fileName
                         var fileOutputStream: FileOutputStream? = null
                         try {
                             fileOutputStream =

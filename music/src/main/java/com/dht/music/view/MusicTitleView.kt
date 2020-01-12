@@ -82,11 +82,11 @@ class MusicTitleView : LinearLayout, View.OnClickListener {
         playList.setOnClickListener(this)
     }
 
-    private var fragment: BaseFragment? = null
+    private var activity: BaseActivity? = null
 
 
-    fun setFragemt(fragment: BaseFragment) {
-        this.fragment = fragment
+    fun setActivity(activity: BaseActivity) {
+        this.activity = activity
         repository = RecentPlayRepository(BaseApplication.INSTANCE)
     }
 
@@ -101,13 +101,13 @@ class MusicTitleView : LinearLayout, View.OnClickListener {
      * 更新视图View
      */
     fun updateView() {
-        if (fragment?.getModel() ==null) return
+
         Log.d(TAG, "updateView: ")
-        val isPlaying = fragment?.getModel()!!.isPlaying
+        val isPlaying = BaseFragment.service.isPlaying
         val value =
             mContext.getString(if (isPlaying) R.string.playing else R.string.pause)
         play.text = value
-        currentMusic = fragment?.getModel()?.currentMusic
+        currentMusic = BaseFragment.service.currentMusic
         if (currentMusic == null) {
             return
         }
@@ -120,14 +120,14 @@ class MusicTitleView : LinearLayout, View.OnClickListener {
     override fun onClick(v: View) {
         val i = v.id
         if (i == R.id.music_title_back) {
-            fragment?.activity?.finish()
+            activity?.finish()
             return
         }
         if (i == R.id.music_title_play) {
-            if (fragment?.getModel()!!.isPlaying) {
-                fragment?.getModel()!!.pause()
+            if (BaseFragment.service.isPlaying) {
+                BaseFragment.service.pause()
             } else {
-                fragment?.getModel()!!.playPause()
+                BaseFragment.service.playPause()
             }
             updateView()
             return
@@ -136,11 +136,11 @@ class MusicTitleView : LinearLayout, View.OnClickListener {
             val playListDialogFragment: PlayListDialogFragment =
                 PlayListDialogFragment.newInstance()
             playListDialogFragment.show(
-                fragment!!.activity as BaseActivity,
+                activity as BaseActivity,
                 object : LocalCallback<MusicBean>() {
                     override fun onChangeData(data: MusicBean?) {
                         super.onChangeData(data)
-                        fragment?.getModel()!!.playMusic(data!!)
+                        BaseFragment.service.playMusic(data!!)
                         playListDialogFragment.dismiss()
                     }
                 })

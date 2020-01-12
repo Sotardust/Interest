@@ -4,13 +4,13 @@ import android.app.Application
 import android.os.Environment
 import android.util.Log
 import androidx.annotation.NonNull
-import com.dht.baselib.base.BaseAndroidViewModel
 import com.dht.baselib.callback.LocalCallback
-import com.dht.baselib.util.LogUtil.writeInfo
 import com.dht.baselib.util.ParseUtil.parseAuthor
 import com.dht.baselib.util.ParseUtil.parseSongName
 import com.dht.baselib.util.ParseUtil.parseType
+import com.dht.baselib.util.logd
 import com.dht.database.bean.music.MusicBean
+import com.dht.database.preferences.MessagePreferences
 import com.dht.music.repository.MusicRepository
 import java.io.File
 import java.util.*
@@ -18,8 +18,7 @@ import java.util.*
 /**
  * @author Administrator
  */
-class WelcomeModel(@NonNull application: Application) :
-    BaseAndroidViewModel(application) {
+class WelcomeModel(@NonNull application: Application) {
     private val musicRepository: MusicRepository = MusicRepository(application)
     private val filePaths = ArrayList<File>()
     /**
@@ -38,22 +37,12 @@ class WelcomeModel(@NonNull application: Application) :
             filePaths.clear()
         }
         if (!neteaseFile.exists()) {
-            writeInfo(
-                TAG,
-                "traversalSong",
-                neteasePath + "路径不存在"
-            )
-            Log.d(TAG, "searchSong: " + neteasePath + "路径不存在")
+            logd(TAG + "traversalSong" + neteasePath + "路径不存在")
         } else {
             traversingMusicFile(neteaseFile.path, pathCallback)
         }
         if (!localFile.exists()) {
-            writeInfo(
-                TAG,
-                "traversalSong",
-                localFile.toString() + "路径不存在"
-            )
-            Log.d(TAG, "searchSong: " + localFile + "路径不存在")
+            logd(TAG + "traversalSong" + localFile.toString() + "路径不存在")
         } else {
             traversingMusicFile(localFile.path, pathCallback)
         }
@@ -72,6 +61,9 @@ class WelcomeModel(@NonNull application: Application) :
             TAG,
             "initData: musicList.size = " + musicList.size
         )
+        if (musicList.size != 0) {
+            MessagePreferences.INSTANCE.currentMusic = musicList[0]
+        }
         musicRepository.insertMusic(musicList, localCallback)
     }
 
@@ -101,7 +93,7 @@ class WelcomeModel(@NonNull application: Application) :
     }
 
     companion object {
-        private const val TAG = "HomeViewModel"
+        private const val TAG = "WelcomeViewModel"
     }
 
 }

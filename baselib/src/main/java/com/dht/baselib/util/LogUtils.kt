@@ -70,7 +70,21 @@ fun loge(e: Exception) {
 }
 
 fun loge(ex: Throwable) {
-    loge(e = ex as Exception)
+
+    GlobalScope.launch {
+        val writer = StringWriter()
+        val printWriter = PrintWriter(writer)
+        ex.printStackTrace(printWriter)
+        var cause: Throwable? = ex
+        while (cause != null) {
+            cause.printStackTrace(printWriter)
+            cause = cause.cause
+        }
+        printWriter.close()
+        val info = "\n当前时间：${format.format(System.currentTimeMillis())}\n抛出异常:\n" + "$writer"
+        FileUtil.writerLogToFile(info)
+        coroutineContext.cancelChildren()
+    }
 }
 
 fun loge(tag: String, ex: Exception) {
