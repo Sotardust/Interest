@@ -46,8 +46,8 @@ class PlayMusicFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         mViewModel = ViewModelProviders.of(this).get(PlayMusicViewModel::class.java)
         mBinding.playMusicViewModel = mViewModel
-        initData()
         bindViews()
+        initData()
     }
 
 
@@ -58,16 +58,21 @@ class PlayMusicFragment : BaseFragment() {
 
         GlobalScope.launch {
             val isPlaying = service.isPlaying
-            if (currentMusic.toString() != service.currentMusic.toString()) {
+
+            if (!isPlaying) {
                 service.playMusic(currentMusic)
             }
+            if (currentMusic.name != service.currentMusic.name) {
+                service.playMusic(currentMusic)
+            }
+            RxBus.INSTANCE.post(UpdateTopPlayEvent())
         }
 
     }
 
     override fun onResume() {
         super.onResume()
-        RxBus.INSTANCE.post(UpdateTopPlayEvent())
+
     }
 
     override fun bindViews() {
@@ -82,6 +87,11 @@ class PlayMusicFragment : BaseFragment() {
         })
 
         playType.text = PlayType.getPlayTypeString(mPlayType)
+        previous.setOnClickListener(this)
+        playType.setOnClickListener(this)
+        play.setOnClickListener(this)
+        next.setOnClickListener(this)
+        playList.setOnClickListener(this)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

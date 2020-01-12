@@ -6,7 +6,9 @@ import androidx.annotation.NonNull
 import androidx.lifecycle.AndroidViewModel
 import com.dht.baselib.util.file.FileManager.Companion.instance
 import com.dht.baselib.util.file.FileUtil
+import com.dht.baselib.util.onServiceFailure
 import com.dht.baselib.util.toast
+import com.dht.baselib.util.toastCustomTime
 import com.dht.network.BaseModel
 import com.dht.network.NetworkCallback
 import io.reactivex.Observable
@@ -52,12 +54,19 @@ class LoginViewModel(@NonNull  application: Application) :
 
     private val registerCallBack: NetworkCallback<BaseModel<String>> =
         object : NetworkCallback<BaseModel<String>> {
-         override   fun onChangeData(data: BaseModel<String>?) {
-                if (data == null) {
-                    application.applicationContext.toast( "网络超时")
-                    return
-                }
-                application.applicationContext.toast( data.msg?:"")
+            override fun onServiceException() {
+                application.applicationContext.toastCustomTime("网络超时", 200)
+            }
+
+            override fun onServiceFailure() {
+                application.applicationContext.onServiceFailure()
+            }
+
+            override fun onSessionTimeout() {
+//                application.applicationContext.onSessionTimeout()
+            }
+            override   fun onChangeData(data: BaseModel<String>?) {
+                application.applicationContext.toast( data?.msg?:"")
             }
         }
 

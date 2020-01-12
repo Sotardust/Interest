@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <com.dht.music.view.TopTitleView
-        android:id="@+id/download_top_title"
+        android:id="@+id/downloadTopTitle"
         android:layout_width="match_parent"
         android:layout_height="60dp" />
 

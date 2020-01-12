@@ -12,6 +12,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.dht.baselib.base.BaseFragment
 import com.dht.baselib.callback.LocalCallback
+import com.dht.baselib.util.onServiceFailure
+import com.dht.baselib.util.onSessionTimeout
 import com.dht.baselib.util.toastCustomTime
 import com.dht.database.bean.music.MusicBean
 import com.dht.database.preferences.MessagePreferences
@@ -24,7 +26,6 @@ import com.dht.interest.R
 import com.dht.interest.databinding.FragmentLoginBinding
 import com.dht.music.repository.MusicRepository
 import com.dht.network.BaseModel
-import com.dht.network.HttpStatusCode
 import com.dht.network.NetworkCallback
 
 /**
@@ -90,22 +91,29 @@ class LoginFragment : BaseFragment() {
 
     private val loginCallBack: NetworkCallback<BaseModel<String>> =
         object : NetworkCallback<BaseModel<String>> {
+            override fun onServiceException() {
+//                context?.onServiceException()
+                context?.toastCustomTime("网络超时", 200)
+            }
+
+            override fun onServiceFailure() {
+                context?.onServiceFailure()
+            }
+
+            override fun onSessionTimeout() {
+                context?.onSessionTimeout()
+            }
+
             override fun onChangeData(data: BaseModel<String>?) {
-                if (data == null) {
-                    context?.toastCustomTime("网络超时", 200)
-                    return
-                }
                 service.initPlayList()
-                if (data.code == HttpStatusCode.CODE_100) {
-                    if (data.result == null) {
-                        MessagePreferences.INSTANCE.personId = 0L
-                    } else {
-                        MessagePreferences.INSTANCE.personId = data.result!!.toLong()
-                    }
-                    toMainActivity()
+                if (data?.result == null) {
+                    MessagePreferences.INSTANCE.personId = 0L
+                } else {
+                    MessagePreferences.INSTANCE.personId = data.result!!.toLong()
                 }
-                if (!data.msg.isNullOrBlank()) {
-                    context?.toastCustomTime(data.msg!!, 200)
+                toMainActivity()
+                if (!data?.msg.isNullOrBlank()) {
+                    context?.toastCustomTime(data?.msg!!, 200)
                 }
             }
         }

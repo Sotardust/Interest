@@ -2,11 +2,10 @@ package com.dht.music.download
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.dht.baselib.base.BaseFragmentPageAdapter
-import com.dht.baselib.base.BaseViewPager
 import com.dht.baselib.base.BaseActivity
+import com.dht.baselib.base.BaseFragmentPageAdapter
 import com.dht.music.R
-import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.activity_download.*
 import java.util.*
 
 /**
@@ -16,22 +15,12 @@ import java.util.*
  */
 class DownloadActivity : BaseActivity() {
     private val titles = arrayOf("正在下载", "下载完成")
-    private var tabLayout: TabLayout? = null
-    private var baseViewPager: BaseViewPager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_download)
-        bindViews()
         initData()
     }
 
-    /**
-     * 绑定视图View
-     */
-    private fun bindViews() {
-        tabLayout = findViewById(R.id.tabLayout)
-        baseViewPager = findViewById(R.id.baseViewPager)
-    }
 
     /**
      * 初始化基础数据
@@ -45,6 +34,8 @@ class DownloadActivity : BaseActivity() {
             fragmentList,
             titles
         )
+        downloadTopTitle.setActivity(this)
+        downloadTopTitle.updateView(this, "下载管理")
         tabLayout?.setupWithViewPager(baseViewPager)
     }
 }

@@ -47,6 +47,6 @@ class LocalAdapter(recycleItemClickCallBack: RecycleItemClickCallBack<MusicBean>
     }
 
     init {
-        callBack = recycleItemClickCallBack!!
+        callBack = recycleItemClickCallBack
     }
 }

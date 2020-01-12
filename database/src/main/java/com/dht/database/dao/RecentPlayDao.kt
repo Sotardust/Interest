@@ -107,7 +107,7 @@ interface RecentPlayDao {
     fun getAscRecentOneWeek(
         personId: Long,
         playTime: Long
-    ): List<RecentPlayBean>?
+    ): List<RecentPlayBean>
 
     /**
      * 查找人员对应最近一周播放音乐数据升序

@@ -12,6 +12,9 @@ import com.dht.baselib.base.BaseActivity
 import com.dht.baselib.base.BaseFragment
 import com.dht.baselib.callback.RecycleItemClickCallBack
 import com.dht.baselib.util.VerticalDecoration
+import com.dht.baselib.util.onServiceException
+import com.dht.baselib.util.onServiceFailure
+import com.dht.baselib.util.onSessionTimeout
 import com.dht.database.bean.music.CloudMusicBean
 import com.dht.eventbus.RxBus
 import com.dht.eventbus.event.UpdateTopPlayEvent
@@ -25,7 +28,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
-import kotlin.collections.map as map1
 
 /**
  *
@@ -58,7 +60,7 @@ class CloudDiskFragment : BaseFragment() {
     override fun bindViews() {
         super.bindViews()
         cloudTopTitleView.setActivity(activity as BaseActivity)
-        cloudTopTitleView.updatePlayView()
+        cloudTopTitleView.updateView(activity as BaseActivity, "云盘音乐")
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         localAdapter = CloudDiskAdapter(recycleItemClickCallBack)
         val names = ArrayList<String>()
@@ -74,20 +76,41 @@ class CloudDiskFragment : BaseFragment() {
         RxBus.INSTANCE.post(UpdateTopPlayEvent())
     }
 
+
     private val callback: NetworkCallback<BaseModel<List<CloudMusicBean>>> =
         object : NetworkCallback<BaseModel<List<CloudMusicBean>>> {
             override fun onChangeData(data: BaseModel<List<CloudMusicBean>>?) {
                 mViewModel.insertMusicList(data?.result!!)
-                GlobalScope.launch {
-                    val list = mViewModel.getMusicList()
-                    withContext(Dispatchers.Main) {
-                        localAdapter!!.setUsernameList(list?.map1 { it.name } as ArrayList<String>)
-                        localAdapter!!.setChangeList(list.map1 { it.name } as MutableList<String>)
-                        setRecycleViewVisible(true)
-                    }
-                }
+                handleData()
+            }
+
+            override fun onServiceException() {
+                context?.onServiceException()
+                handleData()
+            }
+
+            override fun onServiceFailure() {
+                context?.onServiceFailure()
+                handleData()
+            }
+
+            override fun onSessionTimeout() {
+                context?.onSessionTimeout()
+            }
+
+        }
+
+    fun handleData() {
+        GlobalScope.launch {
+            val list = mViewModel.getMusicList()
+            withContext(Dispatchers.Main) {
+                localAdapter!!.setUsernameList(list?.map { it.name } as ArrayList<String>)
+                localAdapter!!.setChangeList(list.map { it.name } as MutableList<String>)
+                setRecycleViewVisible(true)
             }
         }
+    }
+
     private val recycleItemClickCallBack: RecycleItemClickCallBack<String> =
         object : RecycleItemClickCallBack<String>() {
             override fun onItemClickListener(value: String?, position: Int?) {

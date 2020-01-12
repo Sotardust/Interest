@@ -6,6 +6,7 @@ import com.dht.database.bean.music.CloudMusicBean
 import com.dht.network.BaseModel
 import com.dht.network.NetworkCallback
 import com.dht.network.RetrofitClient
+import com.dht.network.handlerResponse
 import kotlinx.coroutines.*
 import okhttp3.MultipartBody
 import java.util.*
@@ -31,9 +32,9 @@ class MusicApi {
         GlobalScope.launch(handler) {
             withContext(Dispatchers.IO) {
                 val response = RetrofitClient.INSTANCE.create(BASE_URL, MusicService::class.java)
-                    ?.uploadFile(body)
-                    ?.execute()
-                networkCallback.onChangeData(if (response?.code() != 200) null else response.body())
+                    .uploadFile(body)
+                    .execute()
+                response.handlerResponse(networkCallback)
             }
         }
     }
@@ -52,9 +53,7 @@ class MusicApi {
         GlobalScope.launch(handler) {
             val response = RetrofitClient.INSTANCE.create(BASE_URL, MusicService::class.java)
                 .cloudMusicList.execute()
-            withContext(Dispatchers.Main) {
-                networkCallback.onChangeData(if (response.code() != 200) null else response.body())
-            }
+            response.handlerResponse(networkCallback)
         }
     }
 
@@ -75,8 +74,8 @@ class MusicApi {
         GlobalScope.launch(handler) {
             withContext(Dispatchers.IO) {
                 val response = RetrofitClient.INSTANCE.create(BASE_URL, MusicService::class.java)
-                    ?.downloadMusic(songName)?.execute()
-                networkCallback.onChangeData(if (response?.code() != 200) null else response.body())
+                    .downloadMusic(songName).execute()
+                response.handlerResponse(networkCallback)
             }
         }
     }

@@ -14,10 +14,9 @@ import com.dht.music.repository.RecentPlayRepository
 /**
  * @author Administrator
  */
-class RecentPlayViewModel(@NonNull application: Application) :
-    BaseAndroidViewModel(application) {
-    private val musicData: MutableLiveData<List<RecentPlayBean>> =
-        MutableLiveData()
+class RecentPlayViewModel(@NonNull application: Application) : BaseAndroidViewModel(application) {
+
+    private val musicData: MutableLiveData<List<RecentPlayBean>> = MutableLiveData()
     private val recentPlayRepository: RecentPlayRepository = RecentPlayRepository(application)
     /**
      * 获取最近播放实体类
@@ -26,7 +25,8 @@ class RecentPlayViewModel(@NonNull application: Application) :
      */
     val recentPlayEntityData: MutableLiveData<List<RecentPlayBean>>
         get() {
-            recentPlayRepository.getRecentPlayEntities(object : LocalCallback<List<RecentPlayBean>>() {
+            recentPlayRepository.getRecentPlayEntities(object :
+                LocalCallback<List<RecentPlayBean>>() {
                 override fun onChangeData(data: List<RecentPlayBean>?) {
                     super.onChangeData(data)
                     musicData.postValue(data)

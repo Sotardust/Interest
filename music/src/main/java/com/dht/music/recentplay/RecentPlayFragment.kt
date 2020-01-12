@@ -73,6 +73,9 @@ class RecentPlayFragment : BaseFragment() {
             })
         recentRecycler.adapter = recentPlayAdapter
         recentRecycler.addItemDecoration(VerticalDecoration(3))
+        recentPlay.setOnClickListener(this)
+        recentOneWeek.setOnClickListener(this)
+        recentAllTime.setOnClickListener(this)
 
     }
 
@@ -89,7 +92,7 @@ class RecentPlayFragment : BaseFragment() {
                     mViewModel!!.deleteCurrentRecentEntity(value?.songName, dynamicType)
                     context?.toastCustomTime( R.string.delete_successful)
                 } else {
-                    mViewModel?.insertOrUpdate(value?.music!!)
+                    mViewModel?.insertOrUpdate(value!!.music)
                     MessagePreferences.INSTANCE.currentMusic = value!!.music
                     val intent = Intent(context, PlayMusicActivity::class.java)
                     startActivity(intent)

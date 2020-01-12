@@ -6,11 +6,13 @@ import com.dht.baselib.base.BaseAndroidViewModel
 import com.dht.baselib.util.ParseUtil
 import com.dht.baselib.util.file.FileManager
 import com.dht.baselib.util.file.FileUtil
+import com.dht.baselib.util.onServiceException
+import com.dht.baselib.util.onServiceFailure
+import com.dht.baselib.util.onSessionTimeout
 import com.dht.database.bean.music.CloudMusicBean
 import com.dht.music.api.MusicApi
 import com.dht.music.repository.CloudDiskRepository
 import com.dht.network.BaseModel
-import com.dht.network.HttpStatusCode
 import com.dht.network.NetworkCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,14 +22,10 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.net.URLEncoder
 
-class CloudDiskViewModel : BaseAndroidViewModel {
+class CloudDiskViewModel(application: Application) : BaseAndroidViewModel(application) {
 
-    private var repository: CloudDiskRepository
+    private var repository: CloudDiskRepository = CloudDiskRepository(application)
 
-    constructor(application: Application) : super(application) {
-        repository = CloudDiskRepository(application)
-
-    }
 
     private val musicApi: MusicApi = MusicApi()
 
@@ -74,15 +72,19 @@ class CloudDiskViewModel : BaseAndroidViewModel {
 
     private val networkCallback: NetworkCallback<BaseModel<String>> =
         object : NetworkCallback<BaseModel<String>> {
+            override fun onServiceException() {
+                application.applicationContext.onServiceException()
+            }
 
+            override fun onServiceFailure() {
+                application.applicationContext.onServiceFailure()
+            }
+
+            override fun onSessionTimeout() {
+                application.applicationContext.onSessionTimeout()
+            }
 
             override fun onChangeData(data: BaseModel<String>?) {
-                if (data == null) {
-                    return
-                }
-                if (data.code != HttpStatusCode.CODE_100) {
-                    return
-                }
                 GlobalScope.launch {
                     withContext(Dispatchers.IO) {
                         val path = FileUtil.musicDir + fileName
@@ -90,7 +92,7 @@ class CloudDiskViewModel : BaseAndroidViewModel {
                         try {
                             fileOutputStream =
                                 FileOutputStream(FileManager.instance!!.createNewFile(path))
-                            fileOutputStream.write(data.result?.toByteArray()!!)
+                            fileOutputStream.write(data?.result?.toByteArray()!!)
                             fileOutputStream.flush() //将内容一次性写入文件
                         } catch (e: IOException) {
                             Log.d(TAG, "run() returned: $e")

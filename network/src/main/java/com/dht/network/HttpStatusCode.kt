@@ -6,7 +6,7 @@ package com.dht.network
  *
  * created by dht on 2020/1/6 17:20
  */
-object HttpStatusCode {
+ object HttpStatusCode {
     /**
      * 103 : sessionId 会话超时
      * 102 : 服务器未设置返回结果（默认返回值）
@@ -21,3 +21,4 @@ object HttpStatusCode {
     const val CODE_102 = 102
     const val CODE_103 = 103
 }
+

@@ -145,7 +145,7 @@ class MusicServiceImpl(private val iBinder: IMusicAidlInterface) {
     val isLooping: Boolean
         get() {
             try {
-                return iBinder.isLooping()
+                return iBinder.isLooping
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }

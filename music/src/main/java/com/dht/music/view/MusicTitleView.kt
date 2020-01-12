@@ -111,7 +111,7 @@ class MusicTitleView : LinearLayout, View.OnClickListener {
         if (currentMusic == null) {
             return
         }
-        repository!!.insertOrUpdate(currentMusic!!)
+
         songName.text = currentMusic?.name
         author.text = currentMusic?.author
     }

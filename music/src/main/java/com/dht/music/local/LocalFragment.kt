@@ -18,8 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dht.baselib.base.BaseActivity
 import com.dht.baselib.base.BaseFragment
 import com.dht.baselib.callback.RecycleItemClickCallBack
-import com.dht.baselib.util.SimpleTextWatcher
-import com.dht.baselib.util.VerticalDecoration
+import com.dht.baselib.util.*
 import com.dht.database.bean.music.MusicBean
 import com.dht.database.preferences.MessagePreferences
 import com.dht.music.R
@@ -56,7 +55,6 @@ class LocalFragment : BaseFragment() {
     }
 
 
-
     private val textWatcher: SimpleTextWatcher = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
             super.afterTextChanged(s)
@@ -84,7 +82,7 @@ class LocalFragment : BaseFragment() {
 
     override fun bindViews() {
         super.bindViews()
-        localMusicTitleView.setActivity(activity  as BaseActivity)
+        localMusicTitleView.setActivity(activity as BaseActivity)
         localTopTitleView.updateView(activity as BaseActivity, getString(R.string.local_music))
         localTopTitleView.setLocalTitleBar()
         localTopTitleView.setSearchEditTextWatcher(textWatcher)
@@ -120,8 +118,8 @@ class LocalFragment : BaseFragment() {
                     files.add(file)
                     mViewModel.uploadFiles(files, networkCallback)
                 } else {
-                    mViewModel.insertOrUpdate(value)
-                    MessagePreferences.INSTANCE.currentMusic = value!!
+                    mViewModel.insertOrUpdate(value!!)
+                    MessagePreferences.INSTANCE.currentMusic = value
                     val intent = Intent(context, PlayMusicActivity::class.java)
                     startActivity(intent)
                 }
@@ -129,6 +127,18 @@ class LocalFragment : BaseFragment() {
         }
     private val networkCallback: NetworkCallback<BaseModel<ArrayList<String>>> =
         object : NetworkCallback<BaseModel<ArrayList<String>>> {
+            override fun onServiceException() {
+                context?.onServiceException()
+            }
+
+            override fun onServiceFailure() {
+                context?.onServiceFailure()
+            }
+
+            override fun onSessionTimeout() {
+                context?.onSessionTimeout()
+            }
+
             override fun onChangeData(data: BaseModel<ArrayList<String>>?) {
                 Log.d(TAG, "onChangeData: data = $data")
             }

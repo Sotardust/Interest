@@ -42,8 +42,8 @@ class LocalViewModel(application: Application) :
      *
      * @param musicBean MusicBean
      */
-    fun insertOrUpdate(musicBean: MusicBean?) {
-        playRepository.insertOrUpdate(musicBean!!)
+    fun insertOrUpdate(musicBean: MusicBean) {
+        playRepository.insertOrUpdate(musicBean)
     }
 
     /**

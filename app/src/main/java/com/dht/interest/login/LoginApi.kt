@@ -6,6 +6,7 @@ import com.dht.interest.network.service.LoginService
 import com.dht.network.BaseModel
 import com.dht.network.NetworkCallback
 import com.dht.network.RetrofitClient
+import com.dht.network.handlerResponse
 import kotlinx.coroutines.*
 
 /**
@@ -34,12 +35,10 @@ class LoginApi {
             loge(throwable)
         }
         GlobalScope.launch(handler) {
-                val service = RetrofitClient.INSTANCE.create(BASE_URL, LoginService::class.java)
-                val call = service.login(name, password)
-                val response = call.execute()
-                withContext(Dispatchers.Main) {
-                    networkCallback.onChangeData(if (response.code() != 200) null else response.body())
-                }
+            val service = RetrofitClient.INSTANCE.create(BASE_URL, LoginService::class.java)
+            val call = service.login(name, password)
+            val response = call.execute()
+            response.handlerResponse(networkCallback)
         }
     }
 
@@ -66,8 +65,8 @@ class LoginApi {
             withContext(Dispatchers.IO) {
                 val response =
                     RetrofitClient.INSTANCE.create(BASE_URL, LoginService::class.java)
-                        ?.register(name, password, registerTime)?.execute()
-                networkCallback.onChangeData(if (response?.code() != 200) null else response.body())
+                        .register(name, password, registerTime).execute()
+                response.handlerResponse(networkCallback)
             }
         }
     }

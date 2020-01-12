@@ -45,8 +45,8 @@ class RecentPlayRepository(application: Application) {
                 entity.music = music
                 entity.songName = music.name
                 entity.personId = personId
-                entity.playCount = 1
-                entity.playTotal = 1
+                ++entity.playCount
+                ++entity.playTotal
                 entity.playTime = System.currentTimeMillis()
                 entity.music = music
                 recentPlayDao.addRecentPlayEntity(entity)
@@ -54,19 +54,17 @@ class RecentPlayRepository(application: Application) {
             }
             val index = names.lastIndexOf(music.name)
             val entity: RecentPlayBean = entities[index]
-            var playCount = 0
+            var playCount =entity.playCount
             val currentTime = System.currentTimeMillis()
             //大于1周
-            if (currentTime - entity.playTime >= 7 * 24 * 3600L) {
-                playCount = 1
-            } else {
-                ++playCount
+            if ((currentTime - entity.playTime) <= 7 * 24 * 3600L) {
+                ++playCount;
             }
             recentPlayDao.updateRecentPlayEntity(
                 entity.id,
                 currentTime,
                 playCount,
-                entity.playTotal + 1
+                ++entity.playTotal
             )
 
         }

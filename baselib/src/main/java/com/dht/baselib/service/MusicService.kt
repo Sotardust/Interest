@@ -262,11 +262,10 @@ class MusicService : Service() {
         }
 
         override fun getCurrentMusic(): Music? {
-            if (this@MusicService.currentMusic == null) {
-                val current = MessagePreferences.INSTANCE.currentMusic ?: return null
-                return current.toMusic()
+            return if (this@MusicService.currentMusic == null) {
+                if (MessagePreferences.INSTANCE.currentMusic != null) MessagePreferences.INSTANCE.currentMusic.toMusic() else null
             } else {
-                return this@MusicService.currentMusic
+                this@MusicService.currentMusic
             }
         }
 
