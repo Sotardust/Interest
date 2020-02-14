@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="historyViewModel"
+            type="com.dht.interest.investment.histroy.HistoryViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_title_bar" />
+
+        <include layout="@layout/space_line_1dp" />
+
+        <include layout="@layout/space_line_1dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_20"
+            android:text="收盘价历史趋势图：" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/priceLineChart"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <include layout="@layout/space_line_1dp" />
+
+        <include layout="@layout/recycle_history" />
+
+        <androidx.recyclerview.widget.RecyclerView
+
+            android:id="@+id/historyRecycle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</layout>

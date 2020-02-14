@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="line_color">#F3F4F5</color>
+    <color name="red">#CF0308</color>
+    <color name="green">#07CF1B</color>
+</resources>

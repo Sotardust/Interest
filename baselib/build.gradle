@@ -40,6 +40,10 @@ dependencies {
 
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.ext.kotlinCoroutineVersion"
     api 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    api "com.github.PhilJay:MPAndroidChart:v3.1.0"
+    api "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.45-androidx"
+    api "androidx.viewpager2:viewpager2:1.0.0"
+
     api project(path: ':database')
     api project(path: ':network')
     api project(path: ':eventbus')

@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.dht.baselib.base.BaseFragment
 import com.dht.baselib.base.BaseFragmentPageAdapter
 import com.dht.interest.R
-import com.dht.interest.callback.OnPageChangerCallback
+import com.dht.interest.common.callback.OnPageChangerCallback
 import com.dht.interest.databinding.MainFragmentBinding
 import com.dht.interest.other.SecondaryLinkageFragment
 import com.dht.interest.phone.allcalls.AllCallsFragment

@@ -56,5 +56,28 @@
 
     <string name="download_manage">下载管理</string>
 
+    <string-array name="bondList">
+        <item>代码</item>
+        <item>现价</item>
+        <item>涨跌幅</item>
+        <item>正股名称</item>
+        <item>正股价</item>
+        <item>正股涨跌</item>
+        <item>PB</item>
+        <item>转股价</item>
+        <item>转股价值</item>
+        <item>溢价率</item>
+        <item>评级</item>
+        <item>回售触发价</item>
+        <item>强赎触发价</item>
+        <item>转债占比</item>
+        <item>到期时间</item>
+        <item>剩余年限</item>
+        <item>到期税前收益</item>
+        <item>到期税后收益</item>
+        <item>成交额(万元)</item>
+        <item>双低</item>
+    </string-array>
+
 
 </resources>

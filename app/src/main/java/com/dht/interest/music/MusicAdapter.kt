@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dht.baselib.base.BaseAdapter
 import com.dht.baselib.callback.RecycleItemClickCallBack
 import com.dht.interest.R
-import com.dht.interest.adapter.util.ViewHolder
+import com.dht.interest.common.adapter.util.ViewHolder
 import com.dht.interest.databinding.RecycleItemMusicBinding
 import java.util.*
 

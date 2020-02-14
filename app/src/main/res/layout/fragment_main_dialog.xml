@@ -5,7 +5,7 @@
 
         <variable
             name="mainDialogViewModel"
-            type="com.dht.interest.dialog.MainDialogViewModel" />
+            type="com.dht.interest.common.dialog.MainDialogViewModel" />
     </data>
 
     <LinearLayout

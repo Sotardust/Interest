@@ -16,8 +16,8 @@ import com.dht.baselib.callback.RecycleItemClickCallBack
 import com.dht.baselib.util.VerticalDecoration
 import com.dht.interest.R
 import com.dht.interest.ViewModelFactory
-import com.dht.interest.adapter.LinkageAdapter
-import com.dht.interest.adapter.NextLinkageAdapter
+import com.dht.interest.common.adapter.LinkageAdapter
+import com.dht.interest.common.adapter.NextLinkageAdapter
 import com.dht.interest.databinding.FragmentSecondaryLinkageBinding
 import kotlinx.android.synthetic.main.fragment_secondary_linkage.*
 import java.util.*

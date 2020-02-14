@@ -9,16 +9,23 @@
             type="com.dht.interest.music.MusicViewModel" />
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background"
+        android:orientation="vertical"
         tools:context=".music.MusicFragment">
+
+
+        <com.dht.music.view.MusicTitleView
+            android:id="@+id/musicTitleView"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-    </FrameLayout>
+    </LinearLayout>
 </layout>

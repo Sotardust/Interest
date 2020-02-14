@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dht.baselib.base.BaseActivity
 import com.dht.baselib.base.BaseFragment
 import com.dht.baselib.callback.RecycleItemClickCallBack
 import com.dht.baselib.util.VerticalDecoration
@@ -21,6 +22,7 @@ import com.dht.music.cloud.CloudDiskActivity
 import com.dht.music.download.DownloadActivity
 import com.dht.music.local.LocalActivity
 import com.dht.music.recentplay.RecentPlayActivity
+import kotlinx.android.synthetic.main.fragment_music.*
 
 /**
  * @author Administrator
@@ -58,6 +60,10 @@ class MusicFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        if (musicTitleView != null) {
+            musicTitleView!!.setActivity(activity as BaseActivity)
+            musicTitleView!!.updateView()
+        }
         mViewModel.endListData
             .observe(this, Observer {
                 musicAdapter?.setEndList(it)

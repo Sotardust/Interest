@@ -81,4 +81,10 @@
     <color name="yellow">#FEC006</color>
     <color name="yellow_light">#FEEA3A</color>
     <color name="yellow_dark">#ff6200</color>
+
+    <color name="color_999999">#999999</color>
+    <color name="color_666666">#666666</color>
+    <color name="color_333333">#333333</color>
+
+    <color name="color_0091FF">#0091FF</color>
 </resources>

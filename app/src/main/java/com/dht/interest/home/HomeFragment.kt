@@ -14,13 +14,13 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.dht.baselib.base.BaseActivity
 import com.dht.baselib.base.BaseFragment
 import com.dht.baselib.base.BaseFragmentPageAdapter
 import com.dht.interest.R
-import com.dht.interest.callback.OnPageChangerCallback
-import com.dht.interest.callback.TabLayoutCallback
+import com.dht.interest.common.callback.OnPageChangerCallback
+import com.dht.interest.common.callback.TabLayoutCallback
 import com.dht.interest.databinding.FragmentHomeBinding
+import com.dht.interest.investment.InvestFragment
 import com.dht.interest.music.MusicFragment
 import com.dht.interest.news.NewsFragment
 import com.google.android.material.tabs.TabLayout
@@ -33,9 +33,9 @@ import java.util.*
 class HomeFragment : BaseFragment() {
     private lateinit var mViewModel: HomeViewModel
     private lateinit var mBinding: FragmentHomeBinding
-    private val titles = arrayOf("音乐", "新闻", "小说", "我的")
+    private val titles = arrayOf("音乐", "投资", "新闻", "小说", "我的")
     private val images = intArrayOf(
-        R.drawable.tablayout_music_bg, R.drawable.tablayout_news_bg,
+        R.drawable.tablayout_music_bg, R.drawable.tablayout_news_bg, R.drawable.tablayout_news_bg,
         R.drawable.tablayout_novel_bg, R.drawable.tablayout_setting_bg
     )
 
@@ -67,13 +67,7 @@ class HomeFragment : BaseFragment() {
         bindViews()
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (homeMusicTitleView != null) {
-            homeMusicTitleView!!.setActivity(activity as BaseActivity)
-            homeMusicTitleView!!.updateView()
-        }
-    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -86,11 +80,12 @@ class HomeFragment : BaseFragment() {
         val musicFragment: MusicFragment = MusicFragment.newInstance()
         musicFragment.arguments = arguments
         mFragmentList.add(musicFragment)
+        mFragmentList.add(InvestFragment.newInstance())
         mFragmentList.add(NewsFragment.newInstance())
         mFragmentList.add(NewsFragment.newInstance())
         mFragmentList.add(NewsFragment.newInstance())
         setCustomTabLayout()
-        baseViewPager.offscreenPageLimit = 4
+        baseViewPager.offscreenPageLimit = 2
         baseViewPager.adapter = BaseFragmentPageAdapter(
             childFragmentManager,
             mFragmentList,

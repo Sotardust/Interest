@@ -9,7 +9,7 @@ import com.dht.baselib.base.BaseAdapter
 import com.dht.baselib.callback.RecycleItemClickCallBack
 import com.dht.database.bean.music.MusicBean
 import com.dht.interest.R
-import com.dht.interest.adapter.util.ViewHolder
+import com.dht.interest.common.adapter.util.ViewHolder
 import com.dht.interest.databinding.RecycleItemDownloadBinding
 import com.dht.interest.music.download.WaveProgressView.OnAnimationListener
 import java.text.DecimalFormat

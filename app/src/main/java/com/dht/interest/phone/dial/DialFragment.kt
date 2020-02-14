@@ -13,7 +13,7 @@ import com.dht.baselib.base.BaseFragment
 import com.dht.baselib.callback.RecycleItemClickCallBack
 import com.dht.baselib.util.VerticalDecoration
 import com.dht.interest.R
-import com.dht.interest.adapter.CallRecordAdapter
+import com.dht.interest.common.adapter.CallRecordAdapter
 import com.dht.interest.databinding.FragmentDialBinding
 import com.dht.interest.repository.entity.AllCallsEntity
 import kotlinx.android.synthetic.main.fragment_dial.*

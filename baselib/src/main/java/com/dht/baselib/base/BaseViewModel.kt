@@ -11,4 +11,4 @@ import androidx.lifecycle.ViewModel
  *
  * @author Administrator
  */
-class BaseViewModel : ViewModel()
+open class BaseViewModel : ViewModel()

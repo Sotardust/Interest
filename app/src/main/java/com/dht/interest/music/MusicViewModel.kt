@@ -18,6 +18,7 @@ import java.util.*
  */
 class MusicViewModel(@NonNull application: Application) :
     BaseAndroidViewModel(application) {
+
     private val repository: MusicRepository = MusicRepository(application)
     private val recentPlayRepository: RecentPlayRepository = RecentPlayRepository(application)
     private val cloudDiskRepository: CloudDiskRepository = CloudDiskRepository(application)
