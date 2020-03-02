@@ -1,7 +1,7 @@
 package com.dht.interest.common.api.service
 
 import com.dht.interest.investment.BondListModel
-import com.dht.interest.investment.bond.FundDataModel
+import com.dht.interest.investment.fund.FundDataModel
 import com.dht.interest.investment.histroy.HistoryModel
 import retrofit2.Call
 import retrofit2.http.*

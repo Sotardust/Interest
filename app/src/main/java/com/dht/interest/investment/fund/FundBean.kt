@@ -1,4 +1,4 @@
-package com.dht.interest.investment.bond
+package com.dht.interest.investment.fund
 
 import com.google.gson.annotations.SerializedName
 

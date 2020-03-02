@@ -67,6 +67,7 @@ class LineChartHelper private constructor() {
         lineChart.setPinchZoom(false)
         //是否可以缩放 仅x轴
         lineChart.isScaleXEnabled = true
+        lineChart.isScaleYEnabled = true
         lineChart.setDrawBorders(false)
 
         // get the legend (only possible after setting data)
@@ -102,6 +103,7 @@ class LineChartHelper private constructor() {
         xAxis.setDrawLabels(true)
 
         xAxis.granularity = 1f
+        xAxis.mDecimals = 2
         //设置位置底部
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setAvoidFirstLastClipping(true)
@@ -122,7 +124,7 @@ class LineChartHelper private constructor() {
         yAxis.setDrawZeroLine(true)
         yAxis.zeroLineWidth = 0.5f
         // axis range
-        yAxis.axisMaximum = 30f
+        yAxis.axisMaximum = 20f
         yAxis.axisMinimum = 0f
 
     }
@@ -166,10 +168,15 @@ class LineChartHelper private constructor() {
                         values.add(Entry(i.toFloat(), beans[i].volume.toFloat()))
                     }
                     isYtm -> {
-                        values.add(Entry(i.toFloat(), beans[i].ytm_rt.toFloat()))
+                        values.add(Entry(i.toFloat(), beans[i].ytm_rt.replace("%", "").toFloat()))
                     }
                     isPrem -> {
-                        values.add(Entry(i.toFloat(), beans[i].premium_rt.toFloat()))
+                        values.add(
+                            Entry(
+                                i.toFloat(),
+                                beans[i].premium_rt.replace("%", "").toFloat()
+                            )
+                        )
                     }
                     isValue -> {
                         values.add(Entry(i.toFloat(), beans[i].convert_value.toFloat()))
@@ -180,7 +187,7 @@ class LineChartHelper private constructor() {
             }
         }
 
-        setAxisData(lineChart, beans, list)
+        setAxisData(lineChart, beans, list, isPrice, isVolume, isYtm, isPrem, isValue)
         val set1 = getDataSet(lineChart, values, context, R.color.color_0091FF)
 
         // set color of filled area
@@ -261,13 +268,39 @@ class LineChartHelper private constructor() {
      * @param beans     历史集合
      * @param list      X轴展示的数据集合
      */
-    private fun setAxisData(lineChart: LineChart, beans: List<HistroyBean>, list: List<String>) {
+    private fun setAxisData(
+        lineChart: LineChart,
+        beans: List<HistroyBean>,
+        list: List<String>,
+        isPrice: Boolean,
+        isVolume: Boolean,
+        isYtm: Boolean,
+        isPrem: Boolean,
+        isValue: Boolean
+    ) {
         if (beans.isNotEmpty()) {
             val yAxis = lineChart.axisLeft
-            val max = beans.map { it.price.toFloat() }.max()
+            val max = when {
+                isVolume -> beans.map { it.volume.toFloat() }.max()
+                isYtm -> beans.map { it.ytm_rt.replace("%", "").toFloat() }.max()
+                isPrem -> beans.map { it.premium_rt.replace("%", "").toFloat() }.max()
+                isValue -> beans.map { it.convert_value.toFloat() }.max()
+                isPrice -> beans.map { it.price.toFloat() }.max()
+                else -> 0f
+            }
+
+            val min = when {
+                isVolume -> beans.map { it.volume.toFloat() }.min()
+                isYtm -> beans.map { it.ytm_rt.replace("%", "").toFloat() }.min()
+                isPrem -> beans.map { it.premium_rt.replace("%", "").toFloat() }.min()
+                isValue -> beans.map { it.convert_value.toFloat() }.min()
+                isPrice -> beans.map { it.price.toFloat() }.min()
+                else -> 0f
+            }
+
             // axis range
-            yAxis.axisMaximum = getFloatValue(max!!, true)
-            yAxis.axisMinimum = 0f
+            yAxis.axisMaximum = max!!
+            yAxis.axisMinimum = min!!
             val xAxis = lineChart.xAxis
             xAxis.valueFormatter = IndexAxisValueFormatter(list)
         }

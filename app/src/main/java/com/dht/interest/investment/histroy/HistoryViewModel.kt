@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.dht.baselib.base.BaseViewModel
 import com.dht.baselib.util.logd
 import com.dht.interest.common.api.InvestApi
-import com.dht.interest.investment.bond.FundDataModel
+import com.dht.interest.investment.fund.FundDataModel
 import com.dht.network.NetworkCallback
 
 /**

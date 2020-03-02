@@ -1,6 +1,6 @@
 package com.dht.interest
 
-import com.dht.interest.investment.bond.FundTest
+import com.dht.interest.investment.fund.FundTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

@@ -5,7 +5,7 @@ import com.dht.baselib.util.INVEST_BASE_URL
 import com.dht.baselib.util.loge
 import com.dht.interest.common.api.service.InvestService
 import com.dht.interest.investment.BondListModel
-import com.dht.interest.investment.bond.FundDataModel
+import com.dht.interest.investment.fund.FundDataModel
 import com.dht.interest.investment.histroy.HistoryModel
 import com.dht.network.NetworkCallback
 import com.dht.network.RetrofitClient

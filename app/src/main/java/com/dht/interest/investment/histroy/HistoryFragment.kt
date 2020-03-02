@@ -89,6 +89,7 @@ class HistoryFragment : BaseFragment() {
         })
 
         history_price.setOnClickListener {
+            historyTitle.text = "收盘价历史趋势图："
             LineChartHelper.INSTANCE.setChartData(
                 priceLineChart,
                 context,
@@ -101,6 +102,7 @@ class HistoryFragment : BaseFragment() {
             )
         }
         history_volume.setOnClickListener {
+            historyTitle.text = "成交额（万元）历史趋势图："
             LineChartHelper.INSTANCE.setChartData(
                 priceLineChart,
                 context,
@@ -113,6 +115,7 @@ class HistoryFragment : BaseFragment() {
             )
         }
         history_ytm_rt.setOnClickListener {
+            historyTitle.text = "收益率历史趋势图："
             LineChartHelper.INSTANCE.setChartData(
                 priceLineChart,
                 context,
@@ -125,6 +128,7 @@ class HistoryFragment : BaseFragment() {
             )
         }
         history_premium_rt.setOnClickListener {
+            historyTitle.text = "转股溢价率历史趋势图："
             LineChartHelper.INSTANCE.setChartData(
                 priceLineChart,
                 context,
@@ -137,6 +141,7 @@ class HistoryFragment : BaseFragment() {
             )
         }
         history_convert_value.setOnClickListener {
+            historyTitle.text = "转股价值历史趋势图："
             LineChartHelper.INSTANCE.setChartData(
                 priceLineChart,
                 context,
