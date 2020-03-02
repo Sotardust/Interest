@@ -1,9 +1,11 @@
 package com.dht.interest.common.api
 
+import com.dht.baselib.util.FUND_BASE_URL
 import com.dht.baselib.util.INVEST_BASE_URL
 import com.dht.baselib.util.loge
 import com.dht.interest.common.api.service.InvestService
 import com.dht.interest.investment.BondListModel
+import com.dht.interest.investment.bond.FundDataModel
 import com.dht.interest.investment.histroy.HistoryModel
 import com.dht.network.NetworkCallback
 import com.dht.network.RetrofitClient
@@ -92,4 +94,40 @@ class InvestApi {
             }
         }
     }
+
+    /**
+     * 获取基金历史净值
+     */
+    fun getfundHistoryData(
+        bondId: String,
+        timestamp: Long,
+        networkCallback: NetworkCallback<FundDataModel>
+    ) {
+        val handler = CoroutineExceptionHandler { _, throwable ->
+
+            networkCallback.onChangeData(null)
+            loge(throwable)
+        }
+        GlobalScope.launch(handler) {
+            val service = RetrofitClient.INSTANCE.create(FUND_BASE_URL, InvestService::class.java)
+            val call = service.getFundHistoryData(
+                "jQuery183007241219415352096_1583113519435",
+                "519674",
+                1,
+                20,
+                "",
+                "",
+                timestamp
+            )
+            val response = call.execute()
+            val code = response.code()
+            if (code == 200) {
+                networkCallback.onChangeData(response.body())
+            } else {
+                networkCallback.onServiceFailure()
+
+            }
+        }
+    }
+
 }

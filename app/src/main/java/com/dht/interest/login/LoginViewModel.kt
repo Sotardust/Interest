@@ -6,7 +6,7 @@ import androidx.annotation.NonNull
 import androidx.lifecycle.AndroidViewModel
 import com.dht.baselib.util.file.FileManager.Companion.instance
 import com.dht.baselib.util.file.FileUtil
-import com.dht.baselib.util.onServiceFailure
+//import com.dht.baselib.util.onServiceFailure
 import com.dht.baselib.util.toast
 import com.dht.baselib.util.toastCustomTime
 import com.dht.interest.common.api.LoginApi
@@ -60,7 +60,7 @@ class LoginViewModel(@NonNull  application: Application) :
             }
 
             override fun onServiceFailure() {
-                application.applicationContext.onServiceFailure()
+//                application.applicationContext.onServiceFailure()
             }
 
             override fun onSessionTimeout() {

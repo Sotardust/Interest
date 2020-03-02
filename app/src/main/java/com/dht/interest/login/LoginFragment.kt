@@ -12,8 +12,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.dht.baselib.base.BaseFragment
 import com.dht.baselib.callback.LocalCallback
-import com.dht.baselib.util.onServiceFailure
-import com.dht.baselib.util.onSessionTimeout
+//import com.dht.baselib.util.onServiceFailure
+//import com.dht.baselib.util.onSessionTimeout
 import com.dht.baselib.util.toastCustomTime
 import com.dht.database.bean.music.MusicBean
 import com.dht.database.preferences.MessagePreferences
@@ -97,11 +97,11 @@ class LoginFragment : BaseFragment() {
             }
 
             override fun onServiceFailure() {
-                context?.onServiceFailure()
+//                context?.onServiceFailure()
             }
 
             override fun onSessionTimeout() {
-                context?.onSessionTimeout()
+//                context?.onSessionTimeout()
             }
 
             override fun onChangeData(data: BaseModel<String>?) {

@@ -128,15 +128,15 @@ class LocalFragment : BaseFragment() {
     private val networkCallback: NetworkCallback<BaseModel<ArrayList<String>>> =
         object : NetworkCallback<BaseModel<ArrayList<String>>> {
             override fun onServiceException() {
-                context?.onServiceException()
+//                context?.onServiceException()
             }
 
             override fun onServiceFailure() {
-                context?.onServiceFailure()
+//                context?.onServiceFailure()
             }
 
             override fun onSessionTimeout() {
-                context?.onSessionTimeout()
+//                context?.onSessionTimeout()
             }
 
             override fun onChangeData(data: BaseModel<ArrayList<String>>?) {

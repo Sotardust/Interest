@@ -63,6 +63,8 @@ class HistoryFragment : BaseFragment() {
         titleBack.setOnClickListener { activity?.finish() }
         titleContent.text = bondName
         mViewModel.initHistoryList(bondId!!, System.currentTimeMillis())
+        mViewModel.initFundHistoryList(bondId, System.currentTimeMillis())
+
         adapter = HistoryAdapter(ArrayList())
         historyRecycle?.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

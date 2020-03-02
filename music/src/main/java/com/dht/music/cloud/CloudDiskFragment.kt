@@ -12,9 +12,9 @@ import com.dht.baselib.base.BaseActivity
 import com.dht.baselib.base.BaseFragment
 import com.dht.baselib.callback.RecycleItemClickCallBack
 import com.dht.baselib.util.VerticalDecoration
-import com.dht.baselib.util.onServiceException
-import com.dht.baselib.util.onServiceFailure
-import com.dht.baselib.util.onSessionTimeout
+//import com.dht.baselib.util.onServiceException
+//import com.dht.baselib.util.onServiceFailure
+//import com.dht.baselib.util.onSessionTimeout
 import com.dht.database.bean.music.CloudMusicBean
 import com.dht.eventbus.RxBus
 import com.dht.eventbus.event.UpdateTopPlayEvent
@@ -85,17 +85,17 @@ class CloudDiskFragment : BaseFragment() {
             }
 
             override fun onServiceException() {
-                context?.onServiceException()
+//                context?.onServiceException()
                 handleData()
             }
 
             override fun onServiceFailure() {
-                context?.onServiceFailure()
+//                context?.onServiceFailure()
                 handleData()
             }
 
             override fun onSessionTimeout() {
-                context?.onSessionTimeout()
+//                context?.onSessionTimeout()
             }
 
         }

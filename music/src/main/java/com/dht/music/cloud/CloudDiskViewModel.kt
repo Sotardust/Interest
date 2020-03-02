@@ -6,9 +6,9 @@ import com.dht.baselib.base.BaseAndroidViewModel
 import com.dht.baselib.util.ParseUtil
 import com.dht.baselib.util.file.FileManager
 import com.dht.baselib.util.file.FileUtil
-import com.dht.baselib.util.onServiceException
-import com.dht.baselib.util.onServiceFailure
-import com.dht.baselib.util.onSessionTimeout
+//import com.dht.baselib.util.onServiceException
+//import com.dht.baselib.util.onServiceFailure
+//import com.dht.baselib.util.onSessionTimeout
 import com.dht.database.bean.music.CloudMusicBean
 import com.dht.music.api.MusicApi
 import com.dht.music.repository.CloudDiskRepository
@@ -73,15 +73,15 @@ class CloudDiskViewModel(application: Application) : BaseAndroidViewModel(applic
     private val networkCallback: NetworkCallback<BaseModel<String>> =
         object : NetworkCallback<BaseModel<String>> {
             override fun onServiceException() {
-                application.applicationContext.onServiceException()
+//                application.applicationContext.onServiceException()
             }
 
             override fun onServiceFailure() {
-                application.applicationContext.onServiceFailure()
+//                application.applicationContext.onServiceFailure()
             }
 
             override fun onSessionTimeout() {
-                application.applicationContext.onSessionTimeout()
+//                application.applicationContext.onSessionTimeout()
             }
 
             override fun onChangeData(data: BaseModel<String>?) {
