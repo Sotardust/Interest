@@ -34,8 +34,9 @@ class FundTest {
      */
     fun readYinHe() {
         val money = 1000f
-        val fileName = "assets/yinhechuagnxinchengzhang.json"
-//        val fileName = "assets/tianhongzhongzhengyinhangzhishuc.json"
+//        val fileName = "assets/yinhechuagnxinchengzhang.json"
+//        val fileName = "assets/tianhongzhongzhengyinhangzhishuA.json"
+        val fileName = "assets/tianhongzhongzhengyinhangzhishuc.json"
         val file = File(fileName)
         val model = Gson().fromJson(file.readText(), FundDataModel::class.java)
         val fundBeans = model.Data?.beans!!
@@ -81,10 +82,10 @@ class FundTest {
 
             val value = numbers.sum() * bean?.DWJZ?.toFloat()!!
             val mMoney = money * 12 * period
-            println("$years-01开始 定投：$period 年")
+            print("$years-01开始 定投：$period 年,")
             println(
                 "总份额为：${numbers.sum()},本金：${mMoney}元,"
-                        + "总金额：${value},"
+                        + "总金额：$value,"
                         + "持有收益：${value - mMoney},"
                         + "收益率：${(value - mMoney).div(mMoney) * 100}%"
             )
@@ -99,16 +100,16 @@ class FundTest {
 
         //初始年限
         val initYears = 2020
-//        //遍历每年定投金额
-//        for (i in 1..20) {
-//            val year = initYears - i
-//            val date = "$year-01-01"
-//            handleYear(
-//                fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(date)!!.time },
-//                year, 1, money
-//            )
-//        }
-
+        //遍历每年定投金额收益
+        for (i in 1..20) {
+            val year = initYears - i
+            val date = "$year-01-01"
+            handleYear(
+                fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(date)!!.time },
+                year, 1, money
+            )
+        }
+        println("--------------------------------------------------------------------")
         //定投年限
         for (i in 1..20) {
             val year = initYears - i
@@ -123,25 +124,21 @@ class FundTest {
 
 
     /**
-     * 2017/1/1 =1483200000000
-     * 2018/1/1 =1514736000000
-     * 2019/1/1 =1546272000000
-     * 2020/1/1 =1577808000000
+     *
      * 第二种策略：短线操作每隔7天卖出并买入（以卖出的金额为买入额），
      * 若7天内收益相加 <= 5% 则不卖出，一直持有到收益率 >= 5%为止
      */
     private fun twoCase(fundBeans: List<FundBean>, money: Float) {
         /**
-         * @param time 开始时间 eg 2017/1/1 =1483200000000
-         * @param times 投资年限 1、2、3年
-         * @param year 使用年限过滤数据 "2016-12-31"
+         * @param years  开始时间 eg 2017/1/1
+         * @param period 投资年限 1、2、3年
          * @param value 初始投资金额 12000元
          */
-        fun handleCase(time: Long, times: Int, year: String, value: Float): Float {
-            val results =
-                fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(year)!!.time }
+        fun handleCase(years: Int, period: Int, value: Float) {
             // 以2017年开始为例
-            var recordTime = time
+            var recordCurrentTime = format.parse("$years-01-01")!!.time
+            val results =
+                fundBeans.filter { format.parse(it.FSRQ!!)!!.time >= recordCurrentTime }
             //投资金额
             var amount = value
             //份额
@@ -154,27 +151,42 @@ class FundTest {
             var isInit = true
             //买入开始时间
             var startTime = 0L
-            //1天对应的秒数
+            //1天对应的毫秒数
             val oneDay = 24 * 60 * 60 * 1000L
-            //7天对应的秒数
+            //7天对应的毫秒数
             val sevenDay = 7 * oneDay
-            for (i in 1..(365 * times)) {
-                val bean = results.find { it.FSRQ == format.format(recordTime) }
+            //判断今年是否开始投资
+            var isInvest = false
+            for (i in 1..(365 * period)) {
+                val bean = results.find { it.FSRQ == format.format(recordCurrentTime) }
                 if (bean != null) {
                     if (isInit) {
                         share = amount.div(bean.DWJZ!!.toFloat())
-                        startTime = recordTime
+                        startTime = recordCurrentTime
                     }
                     isInit = false
                     list.add(if (bean.JZZZL.isNullOrBlank()) 0f else bean.JZZZL!!.toFloat())
-                    if (recordTime - startTime > sevenDay && list.sum() > rate) {
+                    println("share = $share ,amount =$amount，时间：${(recordCurrentTime - startTime).div(oneDay)}天，收益率 =${list.sum()} ,bean = ${bean}")
+                    if (recordCurrentTime - startTime > sevenDay && list.sum() > rate) {
                         isInit = true
                         amount = share.times(bean.DWJZ!!.toFloat())
                     }
+                    isInvest = true
                 }
-                recordTime += oneDay
+                if (i > 90 && !isInvest) {
+                    return
+                }
+                recordCurrentTime += oneDay
             }
-            return amount
+            if (!isInvest) return
+
+            print("$years-01开始 投资：$period 年")
+            println(
+                ",本金：${value}元,"
+                        + "总金额：$amount,"
+                        + "持有收益：${amount - value},"
+                        + "收益率：${(amount - value).div(value) * 100}%"
+            )
         }
 
         println("***************************** 第二种策略 *****************************")
@@ -183,44 +195,22 @@ class FundTest {
         println("***   若7天内收益相加 <= 5% 则不卖出，一直持有到收益率 >= 5%为止    ******")
         println("***                                                           ******")
         println("********************************************************************")
-        //17年
-        val result17 = handleCase(time17, 1, year17, money)
-        println(
-            "2017年投资金额：$money 元，收入总额：$result17 元，总金额：${result17 - money},收益率：${(result17 - money).div(
-                money
-            ) * 100}%"
-        )
-        val result18 = handleCase(time18, 1, year18, money)
-        println(
-            "2018年投资金额：$money 元，收入总额：$result18 元，总金额：${result18 - money},收益率：${(result18 - money).div(
-                money
-            ) * 100}%"
-        )
-        val result19 = handleCase(time19, 1, year19, money)
-        println(
-            "2019年投资金额：$money 元，收入总额：$result19 元，总金额：${result19 - money},收益率：${(result19 - money).div(
-                money
-            ) * 100}%"
-        )
-        println(
-            "三年分别投资\n"
-                    + "合计：总投资金额 = ${money * 3}元，收入总额为：${result17 + result18 + result19}元，"
-                    + "总金额：${result17 + result18 + result19 - money * 3},"
-                    + "收益率：${(result17 + result18 + result19 - money * 3).div(money * 3) * 100}%\n"
-        )
-        val result3 = handleCase(time17, 3, year17, money * 3)
-        println(
-            "2017年开始投资三年投资金额：${money * 3} 元，收入总额：$result3 元，总金额：${result3 - money * 3},收益率：${(result3 - money * 3).div(
-                money * 3
-            ) * 100}%"
-        )
-        val result2 = handleCase(time18, 2, year18, money * 2)
-        println(
-            "2018年开始投资两年投资金额：${money * 2} 元，收入总额：$result2 元，总金额：${result2 - money * 2},收益率：${(result2 - money * 2).div(
-                money * 2
-            ) * 100}%"
-        )
 
+        //初始年限
+        val initYears = 2020
+        //投资一年时间收益
+        for (i in 1..20) {
+            val years = initYears - i
+            handleCase(years, 1, money)
+        }
+
+        println("--------------------------------------------------------------------")
+
+        //投资n年时间收益
+        for (i in 1..20) {
+            val years = initYears - i
+            handleCase(years, i, money * i)
+        }
     }
 
 
