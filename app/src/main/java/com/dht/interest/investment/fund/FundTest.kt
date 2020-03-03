@@ -34,8 +34,8 @@ class FundTest {
      */
     fun readYinHe() {
         val money = 1000f
-//        val fileName = "assets/yinhechuagnxinchengzhang.json"
-        val fileName = "assets/tianhongzhongzhengyinhangzhishuc.json"
+        val fileName = "assets/yinhechuagnxinchengzhang.json"
+//        val fileName = "assets/tianhongzhongzhengyinhangzhishuc.json"
         val file = File(fileName)
         val model = Gson().fromJson(file.readText(), FundDataModel::class.java)
         val fundBeans = model.Data?.beans!!
@@ -55,40 +55,44 @@ class FundTest {
         /**
          * 打印每一年的收入详情
          */
-        fun handleYear(results: List<FundBean>, year: Int, times: Int, money: Float): Float {
+        fun handleYear(results: List<FundBean>, years: Int, period: Int, money: Float) {
             val numbers: MutableList<Float> = ArrayList()
+
             //第一种 每个月15号定投1000
             var bean: FundBean? = null
-            for (i in 1..(12 * times + 1)) {
+            for (i in 1..(12 * period + 1)) {
 
                 val mYear = i / 12
                 val mMonth = i % 12
                 var currentDate =
-                    "${(year + mYear)}-${(if (mMonth == 0) 12 else mMonth)}-01"
+                    "${(years + mYear)}-${(if (mMonth == 0) 12 else mMonth)}-01"
                 if (currentDate == "2020-12-01") currentDate = "2020-01-01"
-                for (index in 1..10) {
+                for (index in 1..15) {
                     currentDate = currentDate.substringBeforeLast("-") + "-${14 + index}"
                     bean =
                         results.find { format.parse(it.FSRQ!!)!!.time == format.parse(currentDate)!!.time }
                     if (bean != null) break
                 }
-                val result: Float = money.div(bean?.DWJZ?.toFloat()!!)
-                if (i <= 12 * times) {
+                if (bean == null) return
+                val result: Float = money.div(bean.DWJZ?.toFloat()!!)
+                if (i <= 12 * period) {
                     numbers.add(result)
                 } else {
 //                    println("currentDate = $currentDate, bean  =$bean")
                 }
             }
+
+
             val value = numbers.sum() * bean?.DWJZ?.toFloat()!!
-            val mMoney = money * 12 * times
-            println("$year 年 定投：$times 年")
+            val mMoney = money * 12 * period
+            println("$years-01开始 定投：$period 年")
             println(
-                "总份额为：${numbers.sum()},总投入金额：${mMoney}元,"
-                        + "总收益：${value},"
-                        + "总盈利：${value - mMoney},"
-                        + "收益率：${(value - mMoney).div(mMoney) * 100}%\n"
+                "总份额为：${numbers.sum()},本金：${mMoney}元,"
+                        + "总金额：${value},"
+                        + "持有收益：${value - mMoney},"
+                        + "收益率：${(value - mMoney).div(mMoney) * 100}%"
             )
-            return value
+
         }
 
         println("***************************** 第一种策略 *****************************")
@@ -97,36 +101,27 @@ class FundTest {
         println("********                                                    *********")
         println("*********************************************************************")
 
-        val result17 = handleYear(
-            fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(year17)!!.time },
-            2017, 1, money
-        )
-        val result18 = handleYear(
-            fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(year18)!!.time },
-            2018, 1, money
-        )
+        //初始年限
+        val initYears = 2020
+//        //遍历每年定投金额
+//        for (i in 1..20) {
+//            val year = initYears - i
+//            val date = "$year-01-01"
+//            handleYear(
+//                fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(date)!!.time },
+//                year, 1, money
+//            )
+//        }
 
-        val result19 = handleYear(
-            fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(year19)!!.time },
-            2019, 1, money
-        )
-
-        val result3 = handleYear(
-            fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(year17)!!.time },
-            2017, 3, money
-        )
-        val result2 = handleYear(
-            fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(year18)!!.time },
-            2018, 2, money
-        )
-
-        println(
-            "三年分别投资\n"
-                    + "合计：总投资金额 = ${money * 12 * 3}元，收入总额为：${result17 + result18 + result19}元，"
-                    + "总收益：${result17 + result18 + result19 - money * 12 * 3},"
-                    + "收益率：${(result17 + result18 + result19 - money * 12 * 3).div(money * 12 * 3) * 100}%\n"
-        )
-
+        //定投年限
+        for (i in 1..20) {
+            val year = initYears - i
+            val date = "$year-01-01"
+            handleYear(
+                fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(date)!!.time },
+                year, i, money
+            )
+        }
 
     }
 
@@ -156,7 +151,7 @@ class FundTest {
             //份额
             var share = 0f
             //收益率
-            val rate =5f
+            val rate = 5f
             //收益率集合
             val list: MutableList<Float> = ArrayList()
             //是否是买入
@@ -195,37 +190,37 @@ class FundTest {
         //17年
         val result17 = handleCase(time17, 1, year17, money)
         println(
-            "2017年投资金额：$money 元，收入总额：$result17 元，总收益：${result17 - money},收益率：${(result17 - money).div(
+            "2017年投资金额：$money 元，收入总额：$result17 元，总金额：${result17 - money},收益率：${(result17 - money).div(
                 money
             ) * 100}%"
         )
         val result18 = handleCase(time18, 1, year18, money)
         println(
-            "2018年投资金额：$money 元，收入总额：$result18 元，总收益：${result18 - money},收益率：${(result18 - money).div(
+            "2018年投资金额：$money 元，收入总额：$result18 元，总金额：${result18 - money},收益率：${(result18 - money).div(
                 money
             ) * 100}%"
         )
         val result19 = handleCase(time19, 1, year19, money)
         println(
-            "2019年投资金额：$money 元，收入总额：$result19 元，总收益：${result19 - money},收益率：${(result19 - money).div(
+            "2019年投资金额：$money 元，收入总额：$result19 元，总金额：${result19 - money},收益率：${(result19 - money).div(
                 money
             ) * 100}%"
         )
         println(
             "三年分别投资\n"
                     + "合计：总投资金额 = ${money * 3}元，收入总额为：${result17 + result18 + result19}元，"
-                    + "总收益：${result17 + result18 + result19 - money * 3},"
+                    + "总金额：${result17 + result18 + result19 - money * 3},"
                     + "收益率：${(result17 + result18 + result19 - money * 3).div(money * 3) * 100}%\n"
         )
         val result3 = handleCase(time17, 3, year17, money * 3)
         println(
-            "2017年开始投资三年投资金额：${money * 3} 元，收入总额：$result3 元，总收益：${result3 - money * 3},收益率：${(result3 - money * 3).div(
+            "2017年开始投资三年投资金额：${money * 3} 元，收入总额：$result3 元，总金额：${result3 - money * 3},收益率：${(result3 - money * 3).div(
                 money * 3
             ) * 100}%"
         )
         val result2 = handleCase(time18, 2, year18, money * 2)
         println(
-            "2018年开始投资两年投资金额：${money * 2} 元，收入总额：$result2 元，总收益：${result2 - money * 2},收益率：${(result2 - money * 2).div(
+            "2018年开始投资两年投资金额：${money * 2} 元，收入总额：$result2 元，总金额：${result2 - money * 2},收益率：${(result2 - money * 2).div(
                 money * 2
             ) * 100}%"
         )
