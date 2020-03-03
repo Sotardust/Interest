@@ -48,20 +48,16 @@ class FundTest {
 
 
     /**
-     *  第一种策略：
+     *  第一种策略：每个月15号定投1000
      */
     private fun oneCase(fundBeans: List<FundBean>, money: Float) {
-
         /**
          * 打印每一年的收入详情
          */
         fun handleYear(results: List<FundBean>, years: Int, period: Int, money: Float) {
             val numbers: MutableList<Float> = ArrayList()
-
-            //第一种 每个月15号定投1000
             var bean: FundBean? = null
             for (i in 1..(12 * period + 1)) {
-
                 val mYear = i / 12
                 val mMonth = i % 12
                 var currentDate =
