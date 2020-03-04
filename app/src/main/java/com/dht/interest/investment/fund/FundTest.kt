@@ -30,9 +30,31 @@ class FundTest {
 
     private fun initData() {
         workbook = Workbook.createWorkbook(File("assets/dataexcel.xlsx"))
-        fundHashMap["银河创新成长混合"] = "assets/yinhechuagnxinchengzhang.json"
-        fundHashMap["天弘中证银行指数A"] = "assets/tianhongzhongzhengyinhangzhishuA.json"
-        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
+        fundHashMap["银河创新成长混合"] = "assets/银河创新成长混合.json"
+        fundHashMap["天弘中证银行指数A"] = "assets/天弘中证银行指数A.json"
+        fundHashMap["天弘中证银行指数C"] = "assets/天弘中证银行指数C.json"
+        fundHashMap["汇添富中证新能源汽车A"] = "assets/汇添富中证新能源汽车A.json"
+        fundHashMap["汇添富中证新能源汽车C"] = "assets/汇添富中证新能源汽车C.json"
+        fundHashMap["永赢创业板指数C"] = "assets/永赢创业板指数C.json"
+        fundHashMap["天弘中证计算机主题指数C"] = "assets/天弘中证计算机主题指数C.json"
+        fundHashMap["天弘中证银行指数A"] = "assets/天弘中证银行指数A.json"
+        fundHashMap["工银医药健康股票C"] = "assets/工银医药健康股票C.json"
+        fundHashMap["中信建投智信物联网A"] = "assets/中信建投智信物联网A.json"
+        fundHashMap["广发多元新兴股票"] = "assets/广发多元新兴股票.json"
+        fundHashMap["招商中证白酒指数分级"] = "assets/招商中证白酒指数分级.json"
+        fundHashMap["南方500信息联接A"] = "assets/南方500信息联接A.json"
+
+//        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
+//        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
+//        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
+//        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
+//        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
+//        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
+//        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
+//        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
+//        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
+//        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
+//        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
     }
 
     /**
