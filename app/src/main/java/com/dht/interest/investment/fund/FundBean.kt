@@ -29,6 +29,7 @@ class FundBean {
     var LJJZ: String? = null
     @SerializedName("JZZZL")
     var JZZZL: String? = null
+    var FHFCZ: String? = null
 
 
     override fun toString(): String {

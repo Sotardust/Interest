@@ -29,7 +29,7 @@ class FundTest {
     private lateinit var workbook: WritableWorkbook
 
     private fun initData() {
-        workbook = Workbook.createWorkbook(File("assets/dataexcel.xlsx"))
+        workbook = Workbook.createWorkbook(File("assets/dataexcel.xls"))
         fundHashMap["银河创新成长混合"] = "assets/银河创新成长混合.json"
         fundHashMap["天弘中证银行指数A"] = "assets/天弘中证银行指数A.json"
         fundHashMap["天弘中证银行指数C"] = "assets/天弘中证银行指数C.json"
@@ -79,7 +79,8 @@ class FundTest {
          * 打印每一年的收入详情
          */
         fun handleYear(results: List<FundBean>, years: Int, period: Int, money: Float) {
-            val numbers: MutableList<Float> = ArrayList()
+            //份额
+            var share = 0f
             var bean: FundBean? = null
             //判断行数是否执行过
             var isExecute = false
@@ -95,10 +96,14 @@ class FundTest {
                         results.find { format.parse(it.FSRQ!!)!!.time == format.parse(currentDate)!!.time }
                     if (bean != null) break
                 }
+//                if (bean != null && !(bean.FHFCZ?.isBlank()!!)) {
+//                    share = share.times(bean.FHFCZ!!.toFloat())
+//                    println("share = ${share},bean  =$bean")
+//                }
                 if (bean == null) return
                 val result: Float = money.div(bean.DWJZ?.toFloat()!!)
                 if (i <= 12 * period) {
-                    numbers.add(result)
+                    share += result
                 } else {
 //                    println("currentDate = $currentDate, bean  =$bean")
                 }
@@ -108,17 +113,17 @@ class FundTest {
                 }
             }
 
-            val amount = numbers.sum() * bean?.DWJZ?.toFloat()!!
+            val amount = share * bean?.DWJZ?.toFloat()!!
             val mMoney = money * 12 * period
-            addCell(
-                sheet, mRows,
-                "$years-01开始 定投：$period 年",
-                "$mMoney 元",
-                "${formatData(amount, false)}元",
-                "${formatData(amount - mMoney, false)}元",
-                "${formatData((amount - mMoney).div(mMoney) * 100, true)}%",
-                ""
-            )
+//            addCell(
+//                sheet, mRows,
+//                "$years-01开始 定投：$period 年",
+//                "$mMoney 元",
+//                "${formatData(amount, false)}元",
+//                "${formatData(amount - mMoney, false)}元",
+//                "${formatData((amount - mMoney).div(mMoney) * 100, true)}%",
+//                ""
+//            )
             print("$years-01开始 定投：$period 年,")
             println(
                 "本金：${mMoney}元,"
@@ -138,25 +143,25 @@ class FundTest {
         //初始年限
         val initYears = 2020
         //遍历每年定投金额收益
-        for (i in 1..20) {
-            val year = initYears - i
-            val date = "$year-01-01"
-            handleYear(
-                fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(date)!!.time },
-                year, 1, money
-            )
-        }
-        mRows++
-        println("--------------------------------------------------------------------")
-        //定投年限
-        for (i in 1..20) {
-            val year = initYears - i
-            val date = "$year-01-01"
-            handleYear(
-                fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(date)!!.time },
-                year, i, money
-            )
-        }
+//        for (i in 1..20) {
+//            val year = initYears - i
+//            val date = "$year-01-01"
+//            handleYear(
+//                fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(date)!!.time },
+//                year, 1, money
+//            )
+//        }
+//        mRows++
+//        println("--------------------------------------------------------------------")
+//        //定投年限
+//        for (i in 1..20) {
+//            val year = initYears - i
+//            val date = "$year-01-01"
+//            handleYear(
+//                fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(date)!!.time },
+//                year, i, money
+//            )
+//        }
 
         return mRows
 
@@ -265,7 +270,7 @@ class FundTest {
 
 
         //改变收益率
-        for (rate in 3..10) {
+        for (rate in 3..23) {
             mRows++
             for (i in 1..20) {
                 val years = initYears - i
@@ -283,13 +288,13 @@ class FundTest {
 //        }
 
         //改变收益率
-        for (rate in 3..10) {
-            mRows++
-            for (i in 1..20) {
-                val years = initYears - i
-                handleCase(years, i, money * i, rate.toFloat())
-            }
-        }
+//        for (rate in 3..10) {
+//            mRows++
+//            for (i in 1..20) {
+//                val years = initYears - i
+//                handleCase(years, i, money * i, rate.toFloat())
+//            }
+//        }
     }
 
 
@@ -374,8 +379,8 @@ class FundTest {
                 val label = Label(i, 0, titles[i], getFormat(18))
                 sheet.addCell(label)
             }
-            val row = oneCase(sheet, 0, fundBeans, money)
-            twoCase(sheet, row + 1, fundBeans, money * 12)
+//            val row = oneCase(sheet, 0, fundBeans, money)
+            twoCase(sheet,  1, fundBeans, money )
         }
         workbook.write()
         workbook.close()
