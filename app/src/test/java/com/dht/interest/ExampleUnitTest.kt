@@ -18,6 +18,6 @@ class ExampleUnitTest {
     @Test
     fun fundTest() {
         val result = FundTest()
-        result.readYinHe()
+        result.execute()
     }
 }
