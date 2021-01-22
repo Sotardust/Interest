@@ -1,5 +1,6 @@
 package com.dht.interest.investment.fund
 
+import com.dht.baselib.util.logd
 import com.google.gson.Gson
 import jxl.Workbook
 import jxl.write.*
@@ -31,18 +32,18 @@ class FundTest {
     private fun initData() {
         workbook = Workbook.createWorkbook(File("assets/dataexcel.xls"))
         fundHashMap["银河创新成长混合"] = "assets/银河创新成长混合.json"
-        fundHashMap["天弘中证银行指数A"] = "assets/天弘中证银行指数A.json"
-        fundHashMap["天弘中证银行指数C"] = "assets/天弘中证银行指数C.json"
-        fundHashMap["汇添富中证新能源汽车A"] = "assets/汇添富中证新能源汽车A.json"
-        fundHashMap["汇添富中证新能源汽车C"] = "assets/汇添富中证新能源汽车C.json"
-        fundHashMap["永赢创业板指数C"] = "assets/永赢创业板指数C.json"
-        fundHashMap["天弘中证计算机主题指数C"] = "assets/天弘中证计算机主题指数C.json"
-        fundHashMap["天弘中证银行指数A"] = "assets/天弘中证银行指数A.json"
-        fundHashMap["工银医药健康股票C"] = "assets/工银医药健康股票C.json"
-        fundHashMap["中信建投智信物联网A"] = "assets/中信建投智信物联网A.json"
-        fundHashMap["广发多元新兴股票"] = "assets/广发多元新兴股票.json"
-        fundHashMap["招商中证白酒指数分级"] = "assets/招商中证白酒指数分级.json"
-        fundHashMap["南方500信息联接A"] = "assets/南方500信息联接A.json"
+//        fundHashMap["天弘中证银行指数A"] = "assets/天弘中证银行指数A.json"
+//        fundHashMap["天弘中证银行指数C"] = "assets/天弘中证银行指数C.json"
+//        fundHashMap["汇添富中证新能源汽车A"] = "assets/汇添富中证新能源汽车A.json"
+//        fundHashMap["汇添富中证新能源汽车C"] = "assets/汇添富中证新能源汽车C.json"
+//        fundHashMap["永赢创业板指数C"] = "assets/永赢创业板指数C.json"
+//        fundHashMap["天弘中证计算机主题指数C"] = "assets/天弘中证计算机主题指数C.json"
+//        fundHashMap["天弘中证银行指数A"] = "assets/天弘中证银行指数A.json"
+//        fundHashMap["工银医药健康股票C"] = "assets/工银医药健康股票C.json"
+//        fundHashMap["中信建投智信物联网A"] = "assets/中信建投智信物联网A.json"
+//        fundHashMap["广发多元新兴股票"] = "assets/广发多元新兴股票.json"
+//        fundHashMap["招商中证白酒指数分级"] = "assets/招商中证白酒指数分级.json"
+//        fundHashMap["南方500信息联接A"] = "assets/南方500信息联接A.json"
 
 //        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
 //        fundHashMap["天弘中证银行指数C"] = "assets/tianhongzhongzhengyinhangzhishuc.json"
@@ -75,6 +76,7 @@ class FundTest {
         money: Float
     ): Int {
         var mRows = rows
+
         /**
          * 打印每一年的收入详情
          */
@@ -115,20 +117,20 @@ class FundTest {
 
             val amount = share * bean?.DWJZ?.toFloat()!!
             val mMoney = money * 12 * period
-//            addCell(
-//                sheet, mRows,
-//                "$years-01开始 定投：$period 年",
-//                "$mMoney 元",
-//                "${formatData(amount, false)}元",
-//                "${formatData(amount - mMoney, false)}元",
-//                "${formatData((amount - mMoney).div(mMoney) * 100, true)}%",
-//                ""
-//            )
+            addCell(
+                sheet, mRows,
+                "$years-01开始 定投：$period 年",
+                "$mMoney 元",
+                "${formatData(amount, false)}元",
+                "${formatData(amount - mMoney, false)}元",
+                "${formatData((amount - mMoney).div(mMoney) * 100, true)}%",
+                ""
+            )
             print("$years-01开始 定投：$period 年,")
             println(
                 "本金：${mMoney}元,"
                         + "总金额：$amount,"
-                        + "持有收益：${amount - mMoney},"
+                        + "累计收益：${amount - mMoney},"
                         + "收益率：${(amount - mMoney).div(mMoney) * 100}%"
             )
 
@@ -141,27 +143,27 @@ class FundTest {
         println("*********************************************************************")
 
         //初始年限
-        val initYears = 2020
+        val initYears = 2000
         //遍历每年定投金额收益
-//        for (i in 1..20) {
-//            val year = initYears - i
-//            val date = "$year-01-01"
-//            handleYear(
-//                fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(date)!!.time },
-//                year, 1, money
-//            )
-//        }
-//        mRows++
-//        println("--------------------------------------------------------------------")
-//        //定投年限
-//        for (i in 1..20) {
-//            val year = initYears - i
-//            val date = "$year-01-01"
-//            handleYear(
-//                fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(date)!!.time },
-//                year, i, money
-//            )
-//        }
+        for (i in 1..20) {
+            val year = initYears + i
+            val date = "$year-01-01"
+            handleYear(
+                fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(date)!!.time },
+                year, 1, money
+            )
+        }
+        mRows++
+        println("--------------------------------------------------------------------")
+        //定投年限
+        for (i in 1..20) {
+            val year = initYears + i
+            val date = "$year-01-01"
+            handleYear(
+                fundBeans.filter { format.parse(it.FSRQ!!)!!.time > format.parse(date)!!.time },
+                year, i, money
+            )
+        }
 
         return mRows
 
@@ -175,6 +177,7 @@ class FundTest {
      */
     private fun twoCase(sheet: WritableSheet, rows: Int, fundBeans: List<FundBean>, money: Float) {
         var mRows = rows
+
         /**
          * @param years  开始时间 eg 2017/1/1
          * @param period 投资年限 1、2、3年
@@ -245,7 +248,7 @@ class FundTest {
             println(
                 ",本金：${mMoney}元,"
                         + "总金额：${amount.roundToInt()},"
-                        + "持有收益：${amount - mMoney},"
+                        + "累计收益：${amount - mMoney},"
                         + "收益率：${(amount - mMoney).div(mMoney) * 100}%,"
                         + "计划收益率：${rate}%"
             )
@@ -369,7 +372,7 @@ class FundTest {
         //初始投资金额
         val money = 1000f
         var index = 0
-        val titles = arrayListOf("投资计划", "本金", "总金额", "持有收益", "收益率", "计划收益率")
+        val titles = arrayListOf("投资计划", "本金", "总金额", "累计收益", "收益率", "计划收益率")
         for ((name, fileName) in fundHashMap) {
             val model = Gson().fromJson(File(fileName).readText(), FundDataModel::class.java)
             val fundBeans = model.Data?.beans!!
@@ -380,10 +383,58 @@ class FundTest {
                 sheet.addCell(label)
             }
 //            val row = oneCase(sheet, 0, fundBeans, money)
-            twoCase(sheet,  1, fundBeans, money )
+//            twoCase(sheet,  1, fundBeans, money )
+            fourCase(fundBeans.reversed(), name)
         }
         workbook.write()
         workbook.close()
+    }
+
+    /**
+     * 定投 收益率超 20%多少卖出 1/4
+     */
+    private fun fourCase(beans: List<FundBean>, name: String) {
+
+        println("***********************************当前基金为：$name ***********************************")
+        //总金额
+        var totalAmount = 0f
+        //总份额
+        var totalShare = 0f
+        //投资金额
+        var amount = 100f
+        //份额
+        var share = 0f
+        //收益率
+        var rate = 6f
+        //卖出到手的份额钱
+        var mount = 0f
+        val sales = 0.25f
+        for (i in beans.indices) {
+            //一周投一次
+//                println("i % 5 = ${i % 5}")
+            if (i % 5 == 0) {
+                val bean = beans[i]
+                totalAmount += amount
+                share = amount.div(bean.DWJZ!!.toFloat())
+                totalShare += share
+
+                rate = (totalShare * bean.DWJZ!!.toFloat() - totalAmount) / totalAmount
+                println(" rate ${rate * 100} totalAmount = $totalAmount  日期 = ${bean.FSRQ}")
+                if (rate >= sales) {
+                    println("当前总投入金额为 ：${totalAmount} ,当前总金额为${totalShare * bean.DWJZ!!.toFloat()}")
+                    val total = totalShare * bean.DWJZ!!.toFloat()
+                    totalShare *= (1 - sales)
+                    totalAmount = totalShare * bean.DWJZ!!.toFloat()
+                    mount += (total - totalAmount)
+                    println("当前总投入金额为1 ：${total} ,当前总金额为1 $totalAmount}")
+                    println(
+                        "当前总金额为 ${totalShare * bean.DWJZ!!.toFloat()} ,当前金额为 ${totalAmount} " +
+                                ",当前份额为 ${totalShare} 收益率 = $rate%  当前卖出金额为 = ${(total - totalAmount)}"
+                    )
+                }
+            }
+        }
+        println("总收入为：mount =$mount")
     }
 
     /**

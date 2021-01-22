@@ -20,4 +20,9 @@ class ExampleUnitTest {
         val result = FundTest()
         result.execute()
     }
+    @Test
+    fun testData(){
+        val totalStuff = 2000
+        val price = 1.3f
+    }
 }
