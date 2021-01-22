@@ -409,6 +409,7 @@ class FundTest {
         //卖出到手的份额钱
         var mount = 0f
         val sales = 0.25f
+        var value = 0f
         for (i in beans.indices) {
             //一周投一次
 //                println("i % 5 = ${i % 5}")
@@ -420,21 +421,25 @@ class FundTest {
 
                 rate = (totalShare * bean.DWJZ!!.toFloat() - totalAmount) / totalAmount
                 println(" rate ${rate * 100} totalAmount = $totalAmount  日期 = ${bean.FSRQ}")
-                if (rate >= sales) {
-                    println("当前总投入金额为 ：${totalAmount} ,当前总金额为${totalShare * bean.DWJZ!!.toFloat()}")
-                    val total = totalShare * bean.DWJZ!!.toFloat()
-                    totalShare *= (1 - sales)
-                    totalAmount = totalShare * bean.DWJZ!!.toFloat()
-                    mount += (total - totalAmount)
-                    println("当前总投入金额为1 ：${total} ,当前总金额为1 $totalAmount}")
-                    println(
-                        "当前总金额为 ${totalShare * bean.DWJZ!!.toFloat()} ,当前金额为 ${totalAmount} " +
-                                ",当前份额为 ${totalShare} 收益率 = $rate%  当前卖出金额为 = ${(total - totalAmount)}"
-                    )
-                }
+//                if (rate >= sales) {
+                    value = bean.DWJZ!!.toFloat()
+//                    println("当前总投入金额为 ：${totalAmount} ,当前总金额为${totalShare * bean.DWJZ!!.toFloat()}")
+//                    val total = totalShare * bean.DWJZ!!.toFloat()
+//                    totalShare *= (1 - sales)
+//                    totalAmount = totalShare * bean.DWJZ!!.toFloat()
+//                    mount += (total - totalAmount)
+//                    println("当前总投入金额为1 ：${total} ,当前总金额为1 $totalAmount}")
+//                    println(
+//                        "当前总金额为 ${totalShare * bean.DWJZ!!.toFloat()} ,当前金额为 ${totalAmount} " +
+//                                ",当前份额为 ${totalShare} 收益率 = $rate%  当前卖出金额为 = ${(total - totalAmount)}"
+//                    )
+//                }
             }
         }
-        println("总收入为：mount =$mount")
+        println("总投入： =${beans.size / 5 * amount}")
+        println(
+            "当前金额为： =${value * totalShare}  总金额 =${mount + value * totalShare}  收益率 = ${(mount + value * totalShare) / (beans.size / 5 * amount)}/"
+        )
     }
 
     /**
